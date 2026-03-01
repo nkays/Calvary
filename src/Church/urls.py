@@ -24,6 +24,7 @@ from landing_pages import views as lp_views
 urlpatterns = [
     path('', lp_views.home_page, name='home'),
     path('locations/', include('Locations.urls')),
+    path('entries/', include('landing_pages.urls')),
     path('staff/', include('staff.urls')),
     path('bulletins/', include('bulletins.urls')),
     path('healthz/', lp_views.healthz_view, name='healthz'),

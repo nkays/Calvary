@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+
+{% block title %} 
+Entries - {{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+<h1> Entries </h1>
+
+
+<ul>
+
+    {% for obj in object_list %}
+        <li>{{ obj.name }} - {{ obj.email }}</li>
+    {% endfor %}
+
+</ul>
+{% endblock %}
