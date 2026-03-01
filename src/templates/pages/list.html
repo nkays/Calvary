@@ -6,14 +6,42 @@ Entries - {{ block.super }}
 
 
 {% block content %}
-<h1> Entries </h1>
+  <h1>Our Amazing Team</h1>
 
-
-<ul>
+  <div class="row row-cols-1 row-cols-md-3 g-4">  <!-- nice responsive grid -->
 
     {% for obj in object_list %}
-        <li>{{ obj.name }} - {{ obj.email }}</li>
+      <div class="col">
+        <div class="card h-100 shadow-sm">  <!-- h-100 makes them same height, shadow looks pro -->
+
+          {% if obj.photo %}
+            <img src="{{ obj.photo.url }}" class="card-img-top" alt="{{ obj.name }}">
+          {% else %}
+            <!-- fallback so it doesn't look broken -->
+            <img src="https://placehold.co/300x200?text=No+Photo" class="card-img-top" alt="No photo available">
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ obj.name }}</h5>
+            <p class="card-text text-muted">{{ obj.title }}</p>
+          </div>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Email:</strong> {{ obj.email }}</li>
+            <li class="list-group-item"><strong>Location:</strong> {{ obj.location }}</li>
+            <!-- add more if you want, or remove the placeholder one -->
+          </ul>
+
+          <div class="card-body">
+            <a href="#" class="card-link">View profile</a>
+            <a href="mailto:{{ obj.email }}" class="card-link">Email</a>
+          </div>
+
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center text-muted">No team members found... recruiting time? 👀</p>
     {% endfor %}
 
-</ul>
+  </div>
 {% endblock %}
