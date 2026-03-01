@@ -6,6 +6,7 @@ from .models import LandingPageEntry
 class LandingPageEntryAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'created_at']
     search_fields = ['name', 'email']
+    readonly_fields =  ['id', 'created_at', 'updated_at']
     list_filter =  ['created_at']
 
 admin.site.register(LandingPageEntry, LandingPageEntryAdmin)

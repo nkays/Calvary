@@ -35,7 +35,18 @@ def entry_list_notes_view(request, *args, **kwargs):
     return render(request, "pages/list.html", context)
 
 
-
+def landing_page_entry_detail_view(request, *args, **kwargs):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse("You must log in first", status=401)
+    if not user.is_staff:
+        return HttpResponse("You must be staff to view this page", status=403)
+    
+    qs = LandingPageEntry.objects.all()
+    context = {
+        "object": qs.first(),
+    }
+    return render(request, "pages/detail.html", context)
 
 
 
