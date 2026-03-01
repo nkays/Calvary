@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% block title %}Bulletin {{ bulletin.date }}{% endblock %}
+
+{% block content %}
+<div class="my-3">
+  <h1>Bulletin for {{ bulletin.date }}</h1>
+  {% if bulletin.title %}<h4>{{ bulletin.title }}</h4>{% endif %}
+  <div class="mb-2">
+    <a class="btn btn-outline-primary" href="{% url 'bulletins:update' bulletin.pk %}">Edit</a>
+    <a class="btn btn-outline-secondary" href="{% url 'bulletins:list' %}">Back to list</a>
+  </div>
+</div>
+
+<!-- tri-fold layout: two sides, three panels each -->
+<div class="row">
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section1|linebreaks }}
+  </div>
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section2|linebreaks }}
+  </div>
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section3|linebreaks }}
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section4|linebreaks }}
+  </div>
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section5|linebreaks }}
+  </div>
+  <div class="col-md-4 border p-2">
+    {{ bulletin.section6|linebreaks }}
+  </div>
+</div>
+
+{% endblock %}
