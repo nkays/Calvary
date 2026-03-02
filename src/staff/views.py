@@ -23,6 +23,21 @@ def staff_list_view(request, *args, **kwargs):
     
     return render(request, "pages/list.html", context)
 
+def staff_tabled_list_view(request, *args, **kwargs):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse("You must log in first", status=401)
+    if not user.is_staff:
+        return HttpResponse("You must be staff to view this page", status=403)
+    
+    qs = StaffMember.objects.all()
+    context = {
+        "object_list": qs,
+    }
+    
+
+    return render(request, "pages/tabled_list.html", context)
+
 
 
 
