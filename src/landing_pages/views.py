@@ -51,7 +51,7 @@ def landing_page_entry_detail_view(request, *args, **kwargs):
 
 
 def home_page(request, *args, **kwargs):
-    title = "Calvary SE CT"
+    title = "Calvary Chapel South Eastern Connecticut"
     form = LandingPageEntryModelForm(request.POST or None)
     
     if form.is_valid():
