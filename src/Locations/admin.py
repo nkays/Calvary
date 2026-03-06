@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Location
+from .models import Location, Address
 
 
 @admin.register(Location)
@@ -19,7 +19,7 @@ class LocationAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Main Info', {
-            'fields': ('title', 'slug', 'url_or_path')
+            'fields': ('title', 'slug', 'url_or_path', 'address','photo')
         }),
         ('Hierarchy & Display', {
             'fields': ('order', 'is_visible', 'css_class', 'icon')
@@ -37,3 +37,9 @@ class LocationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs
+    
+@admin.register(Address)
+class AdressAdmin(admin.ModelAdmin):
+    list_display = (
+        'city',
+    )

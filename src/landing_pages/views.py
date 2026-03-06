@@ -2,6 +2,8 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import LandingPageEntry
+from staff.models import StaffMember
+from Locations.models import Location
 from .forms import LandingPageEntryModelForm 
 
 
@@ -51,19 +53,28 @@ def landing_page_entry_detail_view(request, *args, **kwargs):
 
 
 def home_page(request, *args, **kwargs):
-    title = "Calvary Chapel South Eastern Connecticut"
-    form = LandingPageEntryModelForm(request.POST or None)
+    title = "Calvary Chapel Eastern Connecticut"
     
+    qs = StaffMember.objects.filter(is_visible=True)
+    Loc = Location.objects.all()
+    # or if you prefer being very explicit:
+    # qs = StaffMember.objects.filter(is_visible=True).order_by('order', 'name')
+    
+    context = {
+        "title": title,
+        "location_list": Loc,
+        "staff_list": qs,
+        
+    }
+    
+    return render(request, "pages/home.html", context)
+
+def connect_form_view(request, *args, **kwargs):
+    title = "Calvary Chapel Eastern Connecticut"   
     if form.is_valid():
         obj = form.save(commit=False)
         obj.slug = obj.email
         obj.save()
-        
-        # print(form.cleaned_data)
-        # name = form.cleaned_data.get("name")
-        # email = form.cleaned_data.get("email")
-        # obj = LandingPageEntry.objects.create(name=name, email=email, slug=email)
-        # obj.save()
         form = LandingPageEntryModelForm()  # Reset form after successful submission
         # Form is valid - process the data
     else:
@@ -76,9 +87,7 @@ def home_page(request, *args, **kwargs):
     }
     parag = "Welcome {title}".format(**context)
     context["parag"] = parag
-    return render(request, "pages/home.html", context)
-
-
+    return render(request, "pages/connect.html", context)
 
 def healthz_view(request):
     return JsonResponse({"status": "ok"})

@@ -13,6 +13,19 @@ class Location(models.Model):
         max_length=100,
         help_text="Display name in the navbar (e.g. 'About Us', 'Services')"
     )
+    
+    address = models.ForeignKey(
+        'Address', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+        )
+    
+    photo = models.ImageField(
+        upload_to='Locations/photos/', 
+        blank=True, 
+        null=True)
+
     slug = models.SlugField(
         max_length=120,
         unique=True,
@@ -78,4 +91,18 @@ class Location(models.Model):
     # @property
     # def has_children(self):
     #     return self.children.exists()
+
+class Address(models.Model):
+    line_1    = models.CharField("Street address", max_length=100)
+    line_2    = models.CharField(max_length=100, blank=True)
+    city      = models.CharField(max_length=100)
+    state     = models.CharField(max_length=2)   # or CharField(choices=STATE_CHOICES)
+    zip_code  = models.CharField(max_length=10)
+    country   = models.CharField(max_length=100, default="United States")
+
+    class Meta:
+        verbose_name_plural = "addresses"
+
+    def __str__(self):
+        return f"{self.line_1}, {self.city}, {self.state} {self.zip_code}"
 
