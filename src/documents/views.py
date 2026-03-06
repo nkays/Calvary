@@ -18,13 +18,13 @@ def document_detail(request, pk):
 def document_accordian(request, *args, **kwargs):
 
     
-    qs = Document.objects.all()
+    doc = Document.objects.all()
     
     # or if you prefer being very explicit:
     # qs = StaffMember.objects.filter(is_visible=True).order_by('order', 'name')
     
     context = {
-        "object_list": qs,        
+        "doc_list": doc,        
     }
     
     return render(request, "pages/accordian.html", context)

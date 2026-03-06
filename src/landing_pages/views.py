@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import LandingPageEntry
 from staff.models import StaffMember
+from documents.models import Document
 from Locations.models import Location
 from .forms import LandingPageEntryModelForm 
 
@@ -57,6 +58,7 @@ def home_page(request, *args, **kwargs):
     
     qs = StaffMember.objects.filter(is_visible=True)
     Loc = Location.objects.all()
+    doc = Document.objects.all()
     # or if you prefer being very explicit:
     # qs = StaffMember.objects.filter(is_visible=True).order_by('order', 'name')
     
@@ -64,6 +66,7 @@ def home_page(request, *args, **kwargs):
         "title": title,
         "location_list": Loc,
         "staff_list": qs,
+        "doc_list": doc,
         
     }
     
