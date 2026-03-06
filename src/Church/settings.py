@@ -99,7 +99,9 @@ INSTALLED_APPS = [
     'Locations',
     'staff',
     'landing_pages',
-    'bulletins'
+    'bulletins',
+    'documents',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [

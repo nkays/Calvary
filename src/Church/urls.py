@@ -25,12 +25,14 @@ from landing_pages import views as lp_views
 
 urlpatterns = [
     path('', lp_views.home_page, name='home'),
+    path('documents/', include('documents.urls')),
     path('locations/', include('Locations.urls')),
     path('entries/', include('landing_pages.urls')),
     path('staff/', include('staff.urls')),
     path('bulletins/', include('bulletins.urls')),
     path('healthz/', lp_views.healthz_view, name='healthz'),
     path('admin/', admin.site.urls),
+    path('summernote/', include('django_summernote.urls')),
 ]
 
 if settings.DEBUG:
