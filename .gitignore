@@ -3,6 +3,7 @@ local-cdn/
 src/static_root
 src/static_root
 src/staticfiles/admin
+src/staticfiles/summernote
 failed.py
 src/landing_pages/fixtures
 
