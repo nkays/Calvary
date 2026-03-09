@@ -21,6 +21,8 @@ class Location(models.Model):
         blank=True
         )
     
+
+
     photo = models.ImageField(
         upload_to='Locations/photos/', 
         blank=True, 
@@ -33,12 +35,7 @@ class Location(models.Model):
         help_text="Auto-generated from title — used in URLs if needed"
     )
     
-    url_or_path = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name="URL or path",
-        help_text="Full URL[](https://...) or Django named path (e.g. 'blog:post-list')"
-    )
+    
     
     # Alternative: if you prefer strict internal linking
     # view_name = models.CharField(max_length=100, blank=True)  # e.g. 'products:detail'
@@ -55,25 +52,15 @@ class Location(models.Model):
         help_text="Uncheck to hide without deleting"
     )
     
-    css_class = models.CharField(
-        max_length=100,
-        blank=True,
-        help_text="Extra CSS class (e.g. 'dropdown', 'highlight', 'new-badge')"
-    )
     
-    icon = models.CharField(
-        max_length=50,
-        blank=True,
-        help_text="Font Awesome / Heroicon name, e.g. 'fa-solid fa-house'"
-    )
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['order', 'title']
-        verbose_name = "Navigation Location"
-        verbose_name_plural = "Navigation Locations"
+        verbose_name = "Location"
+        verbose_name_plural = "Locations"
 
     # def __str__(self):
     def __str__(self):
@@ -84,13 +71,7 @@ class Location(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    # @property
-    # def is_top_level(self):
-    #     return self.parent is None
 
-    # @property
-    # def has_children(self):
-    #     return self.children.exists()
 
 class Address(models.Model):
     line_1    = models.CharField("Street address", max_length=100)
@@ -106,3 +87,32 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.line_1}, {self.city}, {self.state} {self.zip_code}"
 
+class ServiceTime(models.Model):
+
+    DAYS = [
+        ("sun", "Sunday"),
+        ("mon", "Monday"),
+        ("tue", "Tuesday"),
+        ("wed", "Wednesday"),
+        ("thu", "Thursday"),
+        ("fri", "Friday"),
+        ("sat", "Saturday"),
+    ]
+
+    location = models.ForeignKey(
+        Location,
+        related_name="services",
+        on_delete=models.CASCADE
+    )
+
+    day = models.CharField(max_length=3, choices=DAYS, default="sun")
+
+    time = models.TimeField()
+
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["day", "order", "time"]
+
+    def __str__(self):
+        return f"{self.get_day_display()} {self.time}"
