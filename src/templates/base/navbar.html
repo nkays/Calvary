@@ -10,25 +10,33 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/admin/">admin</a>
+          <a class="nav-link" href="https://www.paypal.com/donate/?hosted_button_id=6UHNTARXU9ATA">Give Online</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Features
+          <a class="nav-link dropdown-toggle" href= role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            About Us
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/Locations">Locations</a></li>
-            {% if request.user.is_authenticated %}
-            
+            <li><a class="dropdown-item" href="/staff">Staff</a></li>
             <li><hr class="dropdown-divider"></li>
-            
-            <li><a class="dropdown-item" href="/entries">entries</a></li>
-            <li><a class="dropdown-item" href="/entries/notes">Notes</a></li>
-            {% endif %}
+            <li><a class="dropdown-item" href="https://calvarychapel316.com/welcome-handbook/">What we Believe</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href= role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Connect
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/Locations">Questions</a></li>
+            <li><a class="dropdown-item" href="/staff">Subscribe</a></li>
+            <li><a class="dropdown-item" href="/staff">Server</a></li>
+            <li><a class="dropdown-item" href="/staff">groups</a></li>
+            <li><a class="dropdown-item" href="https://cceastct.churchcenter.com/people/forms/330616">Connect</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          <a class="nav-link " aria-disabled="true">Disabled</a>
         </li>
       </ul>
       <form class="d-flex" role="search">

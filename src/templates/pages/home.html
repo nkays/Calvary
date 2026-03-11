@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% block content %}
+<div style="background-color: #bfcff7;"></div>
 <div class=" mb-5 rounded-3 text-white"
      style="
         height: 300px;
@@ -13,7 +14,11 @@
   <h1 class="display-4 mb-5 mt-0 fw-bold">{{ title }}</h1>
   <p class="col-md-8 fs-4 mb-5 mt-0">
    Verse by Verse.
+
+   
+   
   </p>
+     <a class="btn btn-secondary" href="https://calvarychapeleasternct.online.church/">Watch Livestream »</a>
 </div>
 </div>
 <div class="container-fluid mb-5">  
@@ -72,6 +77,13 @@
     {% endfor %}
 
 </div>
+  <div class="container py-5">
+  <h1 class="display-4 mb-5 mt-0 fw-bold">Get Connected</h1>
+  <p class="col-md-8 fs-4 mb-5 mt-0">
+   <a class="btn btn-secondary" href="https://cceastct.churchcenter.com/people/forms/330616">Connect »</a>
+  </p>
+</div>
+</div>
 </div><div class="accordion" id="myAccordion">
   {% for obj in doc_list %}
     <div class="accordion-item">
@@ -90,8 +102,8 @@
     <p>No documents found. Time to add some content!</p>
   {% endfor %}
 </div>
-<h2 class="mt-5">Meet Our Team</h2>
-<div class="row justify-content-center"> 
+<h2 class="mt-5"style="background-color: #bfcff7;>Meet Our Team" ></h2>
+<div class="row justify-content-center " > 
         {% for obj in staff_list %}
         <div class="col-2"> 
             {% if obj.photo %}
@@ -126,3 +138,4 @@
     </div>
     
 {% endblock %}
+</div>
