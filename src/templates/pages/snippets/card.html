@@ -1,0 +1,17 @@
+<div class="card" style="width: 20rem;">
+  {% if instance.image %} 
+  <a href="{{ instance.get_absolute_url }}"><img class="card-img-top" src="{{ instance.image.url }}" alt="{{ instance.model }} logo"></a>
+  {% endif %} 
+  <div class="card-body">
+    <h5 class="card-model">{{ instance.title }}</h5>
+    <p class="card-text">{{ instance.description|linebreaks|truncatewords:15 }}</p>
+    {% for category in instance.category.all %}
+    <p class="card-text">{{ category.category }}</p>
+      {% for subcategory in category.category.all %}
+      <p class="card-text">{{ category.subcategory }}</p>
+      <a href="{{ instance.get_absolute_url }}" class="btn btn-primary">View</a>
+      {% endfor %}
+    {% endfor %}
+    
+  </div>
+</div>

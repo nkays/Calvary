@@ -1,0 +1,46 @@
+<!-- src/templates/pages/sermon_list.html  -->
+{% extends "base/base.html" %}
+
+{% block title %} 
+Sermons - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4">Sermon Archive</h1>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+    {% for sermon in object_list %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+
+          <!-- Thumbnail -->
+          <img 
+            src="{{ sermon.thumbnail }}" 
+            class="card-img-top" 
+            alt="{{ sermon.title }}"
+          >
+
+          <div class="card-body">
+            <h5 class="card-title">{{ sermon.title }}</h5>
+
+            {% if sermon.description %}
+              <p class="card-text text-muted">
+                {{ sermon.description|truncatewords:20 }}
+              </p>
+            {% endif %}
+          </div>
+
+          <div class="card-body">
+            <a href="#" class="card-link">Watch Sermon</a>
+          </div>
+
+        </div>
+      </div>
+
+    {% empty %}
+      <p class="text-center text-muted">No sermons available yet.</p>
+    {% endfor %}
+
+  </div>
+{% endblock %}

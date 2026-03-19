@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+{% block title %}Bulletins{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center my-3">
+  <h1>Weekly Bulletins</h1>
+  <a class="btn btn-primary" href="{% url 'bulletins:add' %}">Add New Bulletin</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Title</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for b in bulletins %}
+    <tr>
+      <td>{{ b.date }}</td>
+      <td>{{ b.title }}</td>
+      <td>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'bulletins:detail' b.pk %}">View</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'bulletins:update' b.pk %}">Edit</a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3">No bulletins yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if is_paginated %}
+<nav aria-label="Bulletin pagination">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link">{{ page_obj.number }}/{{ page_obj.paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
