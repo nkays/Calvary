@@ -1,0 +1,56 @@
+<!-- src/templates/pages/sermon_detail.html -->
+
+{% extends "base/base.html" %}
+
+{% block title %}
+{{ sermon.title }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Title -->
+  <h1 class="mb-3">{{ sermon.title }}</h1>
+
+  <!-- Video Embed -->
+    <div class="ratio ratio-16x9 mb-3">
+    <iframe
+        src="{{ sermon.embed_url }}"
+        title="{{ sermon.title }}"
+        frameborder="0"
+        allowfullscreen>
+    </iframe>
+    </div>
+
+    <div class="text-center mb-4">
+    <a 
+        href="https://www.youtube.com/watch?v={{ sermon.youtube_id }}" 
+        target="_blank"
+        class="btn btn-outline-primary"
+    >
+        Watch on YouTube
+    </a>
+    </div>
+
+  <!-- Meta Info -->
+  <div class="mb-3 text-muted">
+    {% if sermon.series %}
+      <p><strong>Series:</strong> {{ sermon.series.title }}</p>
+    {% endif %}
+    <p><strong>Published:</strong> {{ sermon.published_at|date:"F j, Y" }}</p>
+  </div>
+
+  <!-- Description -->
+  {% if sermon.description %}
+    <div class="mb-4">
+      <p>{{ sermon.description|linebreaks }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Back Link -->
+  <a href="{% url 'sermon_list' %}" class="btn btn-outline-secondary">
+    ← Back to Sermons
+  </a>
+
+</div>
+{% endblock %}

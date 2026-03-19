@@ -32,7 +32,15 @@ Sermons - {{ block.super }}
           </div>
 
           <div class="card-body">
-            <a href="#" class="card-link">Watch Sermon</a>
+            <div class="text-center mb-4">
+                <a 
+                    href="https://www.youtube.com/watch?v={{ sermon.youtube_id }}" 
+                    target="_blank"
+                    class="btn btn-outline-primary"
+                >
+                    Watch on YouTube
+                </a>
+                </div>
           </div>
 
         </div>
