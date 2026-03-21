@@ -1,8 +1,11 @@
-<div class="ratio ratio-16x9">
+ <!-- Video Embed -->
+    <div class="ratio ratio-16x9 mb-3">
     <iframe 
-        src="{{ sermon.embed_url }}" 
-        title="{{ sermon.title }}"
-        frameborder="0"
-        allowfullscreen>
+    width="{{ width|default:300 }}" 
+    height="{{ height|default:170 }}" 
+    src="{{ embed_url }}"
+    frameborder="0"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
     </iframe>
-</div>
+    </div>

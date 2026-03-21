@@ -42,7 +42,7 @@ class Sermon(models.Model):
     youtube_id = models.CharField(max_length=20, unique=True)
     description = models.TextField(blank=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
-    published_at = models.DateTimeField()
+    published_at = models.DateTimeField(null=True, blank=True)
     access = models.CharField(max_length=20, choices=AccessRequirement.choices, default='anyone')
     status = models.CharField(max_length=20, choices=PublishStatus.choices, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,9 +77,12 @@ class Sermon(models.Model):
     def thumbnail(self):
         return self.get_thumbnail_url("high")
     
+    
+    
     @property
     def embed_url(self):
-        return f"https://www.youtube.com/embed/{self.youtube_id}?rel=0&modestbranding=1"
+        clean_id = self.youtube_id.split("?")[0]
+        return f"https://www.youtube-nocookie.com/embed/{clean_id}"
 
     # def save(self, *args, **kwargs):
     #     super().save(*args, **kwargs)

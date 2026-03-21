@@ -33,12 +33,10 @@ Sermons - {{ block.super }}
 
           <div class="card-body">
             <div class="text-center mb-4">
-                <a 
-                    href="https://www.youtube.com/watch?v={{ sermon.youtube_id }}" 
-                    target="_blank"
+                <a href="{% url 'sermon_detail' sermon.pk %}"
                     class="btn btn-outline-primary"
                 >
-                    Watch on YouTube
+                    Watch now
                 </a>
                 </div>
           </div>

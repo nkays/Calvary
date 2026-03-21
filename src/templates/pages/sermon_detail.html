@@ -12,15 +12,8 @@
   <!-- Title -->
   <h1 class="mb-3">{{ sermon.title }}</h1>
 
-  <!-- Video Embed -->
-    <div class="ratio ratio-16x9 mb-3">
-    <iframe
-        src="{{ sermon.embed_url }}"
-        title="{{ sermon.title }}"
-        frameborder="0"
-        allowfullscreen>
-    </iframe>
-    </div>
+ {% include "pages/snippets/embed.html" %}
+ 
 
     <div class="text-center mb-4">
     <a 
@@ -51,6 +44,6 @@
   <a href="{% url 'sermon_list' %}" class="btn btn-outline-secondary">
     ← Back to Sermons
   </a>
-
+  
 </div>
 {% endblock %}
