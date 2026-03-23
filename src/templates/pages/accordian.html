@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+
+{% block content %} 
+<div class="accordion" id="myAccordion">
+  {% for obj in doc_list %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+          {{ obj.title }}
+        </button>
+      </h2>
+      <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#myAccordion">
+        <div class="accordion-body">
+          {{ obj.body|safe }}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No documents found. Time to add some content!</p>
+  {% endfor %}
+</div>
+
+<div class="accordion" id="myAccordion">
+  {% for obj in doc_list %}
+    <div class="d-flex flex-nowrap gap-3" style="overflow-x: auto;">  <!-- horizontal scroll if needed -->
+
+  <!-- Item 1 -->
+  <div class="card" style="min-width: 180px;">
+    <button class="btn btn-outline-primary w-100 text-start" type="button"
+            data-bs-toggle="collapse" data-bs-target="#content1"
+            aria-expanded="false" aria-controls="content1">
+      {{ obj.title }}
+    </button>
+    <div class="collapse collapse-horizontal" id="content1">
+      <div class="card-body" style="width: 300px;">  <!-- fixed width for smooth slide -->
+        {{ obj.body|safe }}  <!-- render body with line breaks -->
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <p>No documents found. Time to add some content!</p>
+  {% endfor %}
+</div>
+{% endblock %}

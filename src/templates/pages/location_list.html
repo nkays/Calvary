@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}  <!-- assuming you have a base.html already -->
+
+{% block title %}All Locations{% endblock %}
+
+{% block content %}
+  <div class="container my-5">
+    <h1 class="mb-4">Locations</h1>
+    
+    {% if locations %}
+      <div class="list-group">
+        {% for loc in locations %}
+          <div class="list-group-item list-group-item-action flex-column align-items-start {% if loc.parent %}ms-4{% endif %}">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">
+                {% if loc.icon %}<i class="{{ loc.icon }} me-2"></i>{% endif %}
+                {{ loc.title }}
+              </h5>
+              <small>
+                {% if loc.is_visible %}
+                  <span class="badge bg-success">Visible</span>
+                {% else %}
+                  <span class="badge bg-secondary">Hidden</span>
+                {% endif %}
+                Order: {{ loc.order }}
+              </small>
+            </div>
+            <p class="mb-1 text-muted">
+              {% if loc.url_or_path %}
+                → {{ loc.url_or_path }}
+              {% else %}
+                (no link set)
+              {% endif %}
+            </p>
+            {% if loc.parent %}
+              <small class="text-muted">Parent: {{ loc.parent.title }}</small>
+            {% else %}
+              <small class="text-muted fw-bold">Top-level</small>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        No navigation locations yet. Head to the admin and add some!
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

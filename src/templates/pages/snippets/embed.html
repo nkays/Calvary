@@ -1,0 +1,20 @@
+<!-- embed.html -->
+<div class="video-preview" data-embed="{{ embed_url }}">
+    
+    <div class="video-thumbnail" style="position:relative; width:{{ width|default:300 }}px; cursor:pointer;">
+        
+        <img 
+            src="{{ thumbnail_url }}"
+            width="{{ width|default:300 }}"
+            height="{{ height|default:170 }}"
+            alt="Video preview for {{ title }}"
+            style="display:block;"
+        />
+
+        <!-- Play button -->
+        <div class="video-play-button">
+            ▶
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}New{% endif %} Bulletin{% endblock %}
+
+{% block content %}
+<div class="my-3">
+  <h1>{% if form.instance.pk %}Edit{% else %}New{% endif %} Bulletin</h1>
+</div>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="mb-3">
+    {{ form.date.label_tag }}
+    {{ form.date }}
+    {{ form.date.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.title.label_tag }}
+    {{ form.title }}
+    {{ form.title.errors }}
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        {{ form.section1.label_tag }}
+        {{ form.section1 }}
+        {{ form.section1.errors }}
+      </div>
+      <div class="mb-3">
+        {{ form.section4.label_tag }}
+        {{ form.section4 }}
+        {{ form.section4.errors }}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        {{ form.section2.label_tag }}
+        {{ form.section2 }}
+        {{ form.section2.errors }}
+      </div>
+      <div class="mb-3">
+        {{ form.section5.label_tag }}
+        {{ form.section5 }}
+        {{ form.section5.errors }}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        {{ form.section3.label_tag }}
+        {{ form.section3 }}
+        {{ form.section3.errors }}
+      </div>
+      <div class="mb-3">
+        {{ form.section6.label_tag }}
+        {{ form.section6 }}
+        {{ form.section6.errors }}
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{% url 'bulletins:list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}

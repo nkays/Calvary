@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+{% block content %}
+<div style="background-color: #bfcff7;"></div>
+<div class=" mb-5 rounded-3 text-white"
+     style="
+        height: 300px;
+
+        background-image: url('https://scontent-bos5-1.xx.fbcdn.net/v/t39.30808-6/527881758_1186227503548572_1045834770136266787_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=7b2446&_nc_ohc=eC2FxA6cO_4Q7kNvwGxEbHO&_nc_oc=AdmaPWyVE3xhSdm546kDc-gi7cQg7APuDsFYAMZGuxtys2Ibtr8jmEmB3_9Uz82XW6TfrCUItZvDmaw-dzfGUd6T&_nc_zt=23&_nc_ht=scontent-bos5-1.xx&_nc_gid=6RFV-XFVVWoWH_FmwDZ5aQ&_nc_ss=8&oh=00_AfwC-z_8YFFCXbM9K3kLsw9qBpA3KMo_PzYMXDz8B1Z1NQ&oe=69B36086');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+     ">
+  <div class="container py-5">
+  <h1 class="display-4 mb-5 mt-0 fw-bold">{{ title }}</h1>
+  <p class="col-md-8 fs-4 mb-5 mt-0">
+   Verse by Verse.
+
+   
+   
+  </p>
+     <a class="btn btn-secondary" href="https://calvarychapeleasternct.online.church/">Watch Livestream »</a>
+</div>
+</div>
+<div class="container-fluid mb-5">  
+<div class="row justify-content-center"> 
+
+    <h2 class="text-center">Places of Worship</h2>
+
+    <div class="col-1"></div>
+
+    {% for obj in location_list %}
+
+    <div class="col-2"> 
+
+        {% if obj.photo %}
+            <img src="{{ obj.photo.url }}" 
+                class="bd-placeholder-img rounded-circle" 
+                alt="{{ obj.title }}" 
+                width="140" 
+                height="140">
+        {% else %}
+            <svg aria-label="Placeholder" 
+                class="bd-placeholder-img rounded-circle" 
+                height="140" 
+                preserveAspectRatio="xMidYMid slice" 
+                role="img" 
+                width="140" 
+                xmlns="http://www.w3.org/2000/svg">
+                <title>No photo available</title>
+                <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+            </svg>
+        {% endif %}
+
+        <h2 class="fw-normal">{{ obj.title }}</h2> 
+
+        <p>
+            {{ obj.address }}
+        </p>
+
+        {% if obj.services.all %}
+        <p class="mb-1"><strong>Service Times</strong></p>
+
+        <ul class="list-unstyled small">
+            {% for service in obj.services.all %}
+                <li>
+                    {{ service.get_day_display }} 
+                    {{ service.time|time:"g:i A" }}
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+    </div>
+
+    <div class="col-1"></div>
+
+    {% endfor %}
+
+</div>
+  <div class="container py-5">
+  <h1 class="display-4 mb-5 mt-0 fw-bold">Get Connected</h1>
+  <p class="col-md-8 fs-4 mb-5 mt-0">
+   <a class="btn btn-secondary" href="https://cceastct.churchcenter.com/people/forms/330616">Connect »</a>
+  </p>
+</div>
+</div>
+</div><div class="accordion" id="myAccordion">
+  {% for obj in doc_list %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+          {{ obj.title }}
+        </button>
+      </h2>
+      <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#myAccordion">
+        <div class="accordion-body">
+          {{ obj.body|safe }}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No documents found. Time to add some content!</p>
+  {% endfor %}
+</div>
+<h2 class="mt-5"style="background-color: #bfcff7;>Meet Our Team" ></h2>
+<div class="row justify-content-center " > 
+        {% for obj in staff_list %}
+        <div class="col-2"> 
+            {% if obj.photo %}
+                <img src="{{ obj.photo.url }}" 
+                    class="bd-placeholder-img rounded-circle" 
+                    alt="{{ obj.name }}" 
+                    width="140" 
+                    height="140">
+                {% else %}
+                    
+                    <svg aria-label="Placeholder" 
+                        class="bd-placeholder-img rounded-circle" 
+                        height="140" 
+                        preserveAspectRatio="xMidYMid slice" 
+                        role="img" 
+                        width="140" 
+                        xmlns="http://www.w3.org/2000/svg">
+                        <title>No photo available</title>
+                        <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
+                    </svg>
+                {% endif %}
+            <h2 class="fw-normal">{{ obj.name }}</h2> 
+            <p>
+                {{ obj.bio }}
+            </p> 
+            <p>
+                <a class="btn btn-secondary" href="#">View details »</a>
+            </p> 
+        </div>
+        <div class="col-1"></div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}
+</div>
