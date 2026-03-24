@@ -1,0 +1,17 @@
+{% extends "base/tail.html" %}
+
+{% block title %}Sermons | Calvary Chapel of the Tri-Valley{% endblock %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold underline">
+    {{ object.title }}
+</h1>
+
+
+ {% include "pages/sermons/snippets/list-display.html" with queryset=sermons_queryset %} 
+            
+     {{object.description}}   
+           
+</div>
+{% endblock %}

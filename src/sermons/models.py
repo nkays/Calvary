@@ -32,17 +32,25 @@ def handle_upload(instance, filename):
 class Series(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    youtube_playlist_id = models.CharField(max_length=255, blank=True, null=True)
+    youtube_playlist_id = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return self.title
+    
+    
+    def get_absolute_url(self):
+        return self.path
+    
+    @property
+    def path(self):
+        return f"/sermons/series/{self.youtube_playlist_id}"
 
 class Sermon(models.Model):
     title = models.CharField(max_length=255)
-    youtube_id = models.CharField(max_length=20, unique=True)
+    youtube_id = models.CharField(max_length=20, unique=True, db_index=True)
     description = models.TextField(blank=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
     published_at = models.DateTimeField(null=True, blank=True)
@@ -58,6 +66,16 @@ class Sermon(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return self.path
+    
+    @property
+    def path(self):
+        series_path = self.series.path
+        if series_path.endswith("/"):
+            series_path = series_path[:-1]
+        return f"{series_path}/{self.youtube_id}"
 
 
     # Available YouTube thumbnail sizes

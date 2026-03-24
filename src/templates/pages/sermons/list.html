@@ -1,9 +1,12 @@
-{% extends "base/base.html" %}
+{% extends "base/tail.html" %}
 
 {% block title %}Sermons | Calvary Chapel of the Tri-Valley{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Sermons</h1>       
+
+<h1> Series List </h1>
+
+ {% include "pages/sermons/snippets/list-display.html" with queryset=object_list %} 
+           
 </div>
 {% endblock %}
