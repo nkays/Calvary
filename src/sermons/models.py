@@ -1,6 +1,6 @@
 #src/sermons/models.py
 from re import match
-
+from django.utils.text import slugify
 from django.db import models
 from google.auth import default
 
@@ -29,24 +29,54 @@ class PublishStatus(models.TextChoices):
 def handle_upload(instance, filename):
     return f'{filename}'
 
+# src/sermons/models.py/get_standalone_series
+def get_standalone_series():
+    from .models import Series
+    obj, _ = Series.objects.get_or_create(
+        slug="standalone",
+        defaults={
+            "title": "Standalone",
+            "description": "Default fallback series",
+            "youtube_playlist_id": None,
+        }
+    )
+    return obj
+
 class Series(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    slug = models.SlugField(unique=True)
     youtube_playlist_id = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    def __str__(self):
-        return self.title
+    # src/sermons/models.py/Series/save
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            if self.youtube_playlist_id:
+                self.slug = self.youtube_playlist_id
+            else:
+                base_slug = slugify(self.title)
+                slug = base_slug
+                counter = 1
+
+                while Series.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+
+                self.slug = slug
+
+        super().save(*args, **kwargs)
     
-    
+    # src/sermons/models.py/Series/get_absolute_url
     def get_absolute_url(self):
-        return self.path
+        return f"/sermons/{self.slug}/"
     
+    # src/sermons/models.py/Series/path
     @property
     def path(self):
-        return f"/sermons/series/{self.youtube_playlist_id}"
+        return f"/sermons/{self.slug}/"
 
 class Sermon(models.Model):
     title = models.CharField(max_length=255)
@@ -58,7 +88,13 @@ class Sermon(models.Model):
     status = models.CharField(max_length=20, choices=PublishStatus.choices, default='draft')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    series = models.ForeignKey(Series, on_delete=models.SET_NULL, null=True, blank=True, related_name='sermons')
+    series = models.ForeignKey(
+        Series, 
+        on_delete=models.SET(get_standalone_series), 
+        null=False, 
+        blank=False, 
+        related_name='sermons'
+    )
    
    
     class Meta:
@@ -67,15 +103,14 @@ class Sermon(models.Model):
     def __str__(self):
         return self.title
     
+    # src/sermons/models.py/Sermon/get_absolute_url
     def get_absolute_url(self):
-        return self.path
-    
+        return f"/sermons/{self.series.slug}/{self.youtube_id}/"
+        
+    # src/sermons/models.py/Sermon/path
     @property
     def path(self):
-        series_path = self.series.path
-        if series_path.endswith("/"):
-            series_path = series_path[:-1]
-        return f"{series_path}/{self.youtube_id}"
+        return f"/sermons/{self.series.slug}/{self.youtube_id}/"
 
 
     # Available YouTube thumbnail sizes

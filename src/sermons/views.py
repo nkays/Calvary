@@ -15,8 +15,6 @@ def series_list(request):
     }
     return render(request, 'pages/sermons/list.html', context)
 
-
-
 def series_detail(request, series_id=None, *args, **kwargs):
     series_obj = services.get_series_detail(series_id=series_id)
     if series_obj is None:
@@ -30,8 +28,11 @@ def series_detail(request, series_id=None, *args, **kwargs):
     return render(request, 'pages/sermons/detail.html', context)
   
 def sermon_list(request):
-    sermons = Sermon.objects.all()
-    return render(request, 'pages/sermon_list.html', {'object_list': sermons})
+    queryset = Sermon.objects.all()
+    context = {
+        'object_list': queryset
+    }
+    return render(request, 'pages/sermon_list.html', context)
 
 def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
     print(series_id, sermon_id)

@@ -33,7 +33,7 @@ Sermons - {{ block.super }}
 
           <div class="card-body">
             <div class="text-center mb-4">
-                <a href="{% url 'sermon_detail' sermon.pk %}"
+                <a href="{{ sermon.get_absolute_url }}"
                     class="btn btn-outline-primary"
                 >
                     Watch now

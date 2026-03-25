@@ -2,12 +2,6 @@
 from django.db.models import Q
 from .models import Sermon, Series, PublishStatus, AccessRequirement
 
-
-
-
-    
-
-
     
 def get_series():
     return Series.objects.all()# services.py/get_sermon_detail/query
@@ -18,10 +12,10 @@ def get_series_detail(series_id=None):
     obj = None
     try:
         obj = Series.objects.get(
-            youtube_playlist_id=series_id,
+            slug=series_id,
         )
-    except:
-        pass
+    except Series.DoesNotExist:
+        return None
     return obj
     
 # services.py/get_sermons_by_series/query
@@ -35,7 +29,7 @@ def get_sermon_detail(series_id=None, sermon_id=None):
     try:
         obj = Sermon.objects.get(
             youtube_id=sermon_id,
-            series__youtube_playlist_id=series_id
+            series__slug=series_id
         )
     except Sermon.DoesNotExist:
         return None

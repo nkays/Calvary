@@ -40,7 +40,7 @@ class SermonMediaMixin:
 class SermonAdmin(SermonMediaMixin, admin.ModelAdmin):
     list_display = ('title', 'series','created_at', 'updated_at')
     list_filter = ('series', 'created_at')
-    fields = ['title', 'description', 'youtube_id', 'published_at']
+    fields = ['title', 'description', 'youtube_id','series','published_at']
     readonly_fields = ['display_video', 'display_image']
 
     
@@ -73,7 +73,7 @@ class SeriesAdmin(admin.ModelAdmin):
     inlines = [SermonInline]
     list_display = ('title', 'description', 'created_at', 'updated_at')
     
-    fields = ['title', 'description', 'youtube_playlist_id','published_at', 'created_at', 'updated_at']
-    readonly_fields = ['created_at', 'updated_at']
+    fields = ['title', 'description', 'youtube_playlist_id','published_at', 'created_at', 'updated_at', 'slug']
+    readonly_fields = ['created_at', 'updated_at','slug']
 
     
