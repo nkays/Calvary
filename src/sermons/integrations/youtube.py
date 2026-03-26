@@ -1,7 +1,7 @@
 # youtube.py/clean-final-version
 from googleapiclient.discovery import build
 from decouple import config
-from sermons.models import Sermon, Series
+from sermons.models import Sermon, Series, get_standalone_series
 from django.utils.dateparse import parse_datetime
 
 
@@ -188,11 +188,7 @@ def sync_uploads_to_sermons(channel_id):
     if not uploads_playlist_id:
         return {"created": [], "updated": []}
 
-    standalone_series, _ = Series.objects.get_or_create(
-        title="Standalone Sermons",
-        defaults={"description": "Sermons not part of a series"}
-    )
-
+    standalone_series = get_standalone_series()
     videos = get_playlist_videos(uploads_playlist_id)
 
     created = []
@@ -204,16 +200,19 @@ def sync_uploads_to_sermons(channel_id):
             defaults={
                 "title": video["title"],
                 "description": video["description"],
-                "published_at": parse_datetime(video["published_at"]) if video["published_at"] else None,
-                # 🚫 DO NOT set series here
+                "published_at": parse_datetime(video["published_at"]) 
+                    if video["published_at"] else None,
                 "status": "published",
+            },
+            create_defaults={  # ✅ ADD THIS
+                "series": standalone_series,
             }
         )
 
         # ✅ ONLY assign series if NEW
         if was_created:
             obj.series = standalone_series
-            obj.save()
+            obj.save(update_fields=["series"])
             created.append(obj)
         else:
             updated.append(obj)

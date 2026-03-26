@@ -31,16 +31,22 @@ def handle_upload(instance, filename):
 
 # src/sermons/models.py/get_standalone_series
 def get_standalone_series():
-    from .models import Series
-    obj, _ = Series.objects.get_or_create(
+    series, _ = Series.objects.get_or_create(
         slug="standalone",
-        defaults={
-            "title": "Standalone",
-            "description": "Default fallback series",
-            "youtube_playlist_id": None,
-        }
+        defaults={"title": "Standalone"}
     )
-    return obj
+    return series
+# def get_standalone_series():
+#     from .models import Series
+#     obj, _ = Series.objects.get_or_create(
+#         slug="standalone",
+#         defaults={
+#             "title": "Standalone",
+#             "description": "Default fallback series",
+#             "youtube_playlist_id": None,
+#         }
+#     )
+#     return obj
 
 class Series(models.Model):
     title = models.CharField(max_length=255)

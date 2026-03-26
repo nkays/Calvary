@@ -146,7 +146,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'calvary_dev',
         'USER': 'nelson',
-        'PASSWORD': 'your_secure_password',
+        'PASSWORD': 'GodIsGood',
         'HOST': 'localhost',          # works perfectly in WSL
         'PORT': '5432',
     }
