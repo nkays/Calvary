@@ -74,6 +74,9 @@ class Series(models.Model):
                 self.slug = slug
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
     
     # src/sermons/models.py/Series/get_absolute_url
     def get_absolute_url(self):

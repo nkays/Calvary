@@ -95,15 +95,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # third party
+    'tailwind',
+    'theme',# django-tailwind theme app
+    # internal
     'commando',
     'polymorphic',
     'Locations',
+    
     'staff',
     'sermons',
     'landing_pages',
     'bulletins',
     'documents',
     'django_summernote',
+]
+
+TAILWIND_APP_NAME="theme" # django-tailwind theme app
+INTERNAL_IPS = [
+    "0.0.0.0",
+    "127.0.0.1",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +127,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    # django-tailwind theme app
+    INSTALLED_APPS.append('django_browser_reload')
+    MIDDLEWARE.append('django_browser_reload.middleware.BrowserReloadMiddleware')
 
 ROOT_URLCONF = 'Church.urls'
 

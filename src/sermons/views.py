@@ -46,7 +46,7 @@ def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
     if sermon_obj is None:
         raise Http404("Sermon not found")
     
-    return render(request, 'pages/sermons/sermon.html', context)
+    return render(request, 'pages/sermon_detail.html', context)
 
    
         
