@@ -1,6 +1,9 @@
 {% extends "base/tail.html" %}
 {% block content %}
 
+
+
+
 <div style="background-color: #bfcff7;"></div>
 <div class=" mb-5 rounded-3 text-white"
      style="
@@ -22,6 +25,7 @@
      <a class="btn btn-secondary" href="https://calvarychapeleasternct.online.church/">Watch Livestream »</a>
 </div>
 </div>
+
 <div class="container-fluid mb-5">  
 <div class="row justify-content-center"> 
 
@@ -137,6 +141,13 @@
         <div class="col-1"></div>
         {% endfor %}
     </div>
+    <button data-modal-target="test-modal" data-modal-toggle="test-modal" class="bg-blue-500 text-white px-4 py-2">
+  Open Modal
+</button>
+
+<div id="test-modal" tabindex="-1" class="hidden">
+  <div class="bg-white p-4">It works 🎉</div>
+</div>
     
 {% endblock %}
 </div>
