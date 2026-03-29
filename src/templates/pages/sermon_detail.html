@@ -1,48 +1,60 @@
-<!-- src/templates/pages/sermon_detail.html -->
 {% extends "base/tail.html" %}
 
-{% block title %}
+{% block head_title %}
 {{ object.title }} - {{ block.super }}
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+
+<div class="max-w-3xl mx-auto">
 
   <!-- Title -->
-  <h1 class="mb-3">{{ object.title }}</h1>
+  <h1 class="text-3xl font-bold mb-6">
+    {{ object.title }}
+  </h1>
 
-{% include "pages/snippets/embed_iframe.html" with embed_url=object.embed_url %}
- 
+  <!-- Video (Responsive Wrapper) -->
+  <div class="mb-6 aspect-video w-full overflow-hidden rounded-lg">
+    {% include "pages/snippets/embed_iframe.html" with embed_url=object.embed_url %}
+  </div>
 
-    <div class="text-center mb-4">
+  <!-- Action Button -->
+  <div class="mb-6 text-center">
     <a 
-        href="https://www.youtube.com/watch?v={{ object.youtube_id }}" 
-        target="_blank"
-        class="btn btn-outline-primary"
+      href="https://www.youtube.com/watch?v={{ object.youtube_id }}" 
+      target="_blank"
+      class="inline-block bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
     >
-        Watch on YouTube
+      Watch on YouTube
     </a>
-    </div>
+  </div>
 
-  <!-- Meta Info -->
-  <div class="mb-3 text-muted">
+  <!-- Meta -->
+  <div class="mb-6 text-sm text-gray-600">
     {% if object.series %}
-      <p><strong>Series:</strong> {{ object.series.title }}</p>
+      <p><span class="font-medium text-gray-800">Series:</span> {{ object.series.title }}</p>
     {% endif %}
-    <p><strong>Published:</strong> {{ object.published_at|date:"F j, Y" }}</p>
+    <p>
+      <span class="font-medium text-gray-800">Published:</span>
+      {{ object.published_at|date:"F j, Y" }}
+    </p>
   </div>
 
   <!-- Description -->
   {% if object.description %}
-    <div class="mb-4">
-      <p>{{ object.description|linebreaks }}</p>
+    <div class="mb-8 text-gray-800 leading-relaxed space-y-3">
+      {{ object.description|linebreaks }}
     </div>
   {% endif %}
 
-  <!-- Back Link -->
-  <a href="{% url 'sermon_list' %}" class="btn btn-outline-secondary">
-    ← Back to Sermons
-  </a>
-  
+  <!-- Back -->
+  <div class="text-center">
+    <a href="{% url 'sermon_list' %}"
+       class="inline-block text-blue-600 hover:underline">
+      ← Back to Sermons
+    </a>
+  </div>
+
 </div>
+
 {% endblock %}

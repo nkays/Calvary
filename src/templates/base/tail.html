@@ -1,29 +1,33 @@
 {% load static tailwind_tags %}
 
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
 
     {% tailwind_css %}
+
     <title>{% block head_title %}Calvary Chapel Eastern CT{% endblock %}</title>
   </head>
-  <body hx-headers='{"X-CSRFToken": "{{ csrf_token}}"}'>
+
+  <body class="bg-gray-50 text-gray-900" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <!-- Navbar -->
     {% include 'base/navbar.html' %}
 
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- HTMX Login Check -->
     <div hx-get="/hx/login/" hx-trigger="load"></div>
 
-    
-    {% block content %}
-    {% endblock %}
-    <h1 class="text-3xl font-bold underline">
-      Hello world from base!
-    </h1>
+    <!-- Flowbite JS -->
     <script src="{% static 'js/flowbite.min.js' %}"></script>
+
   </body>
 </html>
-
-

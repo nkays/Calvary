@@ -1,47 +1,81 @@
 {% extends "base/tail.html" %}
 
-{% block title %} 
+{% block head_title %} 
 Entries - {{ block.super }}
 {% endblock %}
 
-
 {% block content %}
-  <h1>Our Amazing Team</h1>
 
-  <div class="row row-cols-1 row-cols-md-3 g-4">  <!-- nice responsive grid -->
+<h1 class="text-3xl font-bold text-center mb-10">
+  Our Amazing Team
+</h1>
 
-    {% for obj in object_list %}
-      <div class="col">
-        <div class="card h-100 shadow-sm">  <!-- h-100 makes them same height, shadow looks pro -->
+<div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
-          {% if obj.photo %}
-            <img src="{{ obj.photo.url }}" class="card-img-top" alt="{{ obj.name }}">
-          {% else %}
-            <!-- fallback so it doesn't look broken -->
-            <img src="https://placehold.co/300x200?text=No+Photo" class="card-img-top" alt="No photo available">
-          {% endif %}
+  {% for obj in object_list %}
+  <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col">
 
-          <div class="card-body">
-            <h5 class="card-title">{{ obj.name }}</h5>
-            <p class="card-text text-muted">{{ obj.title }}</p>
-          </div>
+    <!-- Image -->
+    {% if obj.photo %}
+      <img src="{{ obj.photo.url }}"
+           alt="{{ obj.name }}"
+           class="w-full h-48 object-cover">
+    {% else %}
+      <img src="https://placehold.co/600x400?text=No+Photo"
+           alt="No photo available"
+           class="w-full h-48 object-cover">
+    {% endif %}
 
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Email:</strong> {{ obj.email }}</li>
-            <li class="list-group-item"><strong>Location:</strong> {{ obj.location }}</li>
-            <!-- add more if you want, or remove the placeholder one -->
-          </ul>
+    <!-- Content -->
+    <div class="p-5 flex flex-col flex-grow">
 
-          <div class="card-body">
-            <a href="#" class="card-link">View profile</a>
-            <a href="mailto:{{ obj.email }}" class="card-link">Email</a>
-          </div>
+      <!-- Name -->
+      <h2 class="text-lg font-semibold">
+        {{ obj.name }}
+      </h2>
 
-        </div>
+      <!-- Title -->
+      <p class="text-sm text-gray-500 mb-4">
+        {{ obj.title }}
+      </p>
+
+      <!-- Details -->
+      <div class="text-sm text-gray-600 space-y-1 mb-4">
+        {% if obj.email %}
+          <p><span class="font-medium text-gray-800">Email:</span> {{ obj.email }}</p>
+        {% endif %}
+        {% if obj.location %}
+          <p><span class="font-medium text-gray-800">Location:</span> {{ obj.location }}</p>
+        {% endif %}
       </div>
-    {% empty %}
-      <p class="text-center text-muted">No team members found... recruiting time? 👀</p>
-    {% endfor %}
+
+      <!-- Actions -->
+      <div class="mt-auto flex justify-between items-center">
+
+        <a href="#"
+           class="text-blue-600 hover:underline text-sm">
+          View profile →
+        </a>
+
+        {% if obj.email %}
+        <a href="mailto:{{ obj.email }}"
+           class="text-sm bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700">
+          Email
+        </a>
+        {% endif %}
+
+      </div>
+
+    </div>
 
   </div>
+
+  {% empty %}
+    <p class="col-span-full text-center text-gray-500">
+      No team members found... recruiting time? 👀
+    </p>
+  {% endfor %}
+
+</div>
+
 {% endblock %}
