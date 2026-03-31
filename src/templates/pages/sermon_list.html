@@ -1,60 +1,69 @@
 {% extends "base/tail.html" %}
 
-{% block head_title %} 
-Sermons - {{ block.super }}
-{% endblock %}
-
 {% block content %}
+<div class="max-w-5xl mx-auto px-4 py-10">
 
-<h1 class="text-3xl font-bold mb-8 text-center">
-  Sermon Archive
-</h1>
-
-<div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-
-  {% for sermon in object_list %}
-  <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col">
-
-    <!-- Thumbnail -->
-    <img 
-      src="{{ sermon.thumbnail }}" 
-      alt="{{ sermon.title }}"
-      class="w-full h-48 object-cover"
-    >
-
-    <!-- Content -->
-    <div class="p-5 flex flex-col flex-grow">
-
-      <h2 class="text-lg font-semibold mb-2">
-        {{ sermon.title }}
-      </h2>
-
-      {% if sermon.description %}
-      <p class="text-sm text-gray-600 mb-4">
-        {{ sermon.description|truncatewords:20 }}
-      </p>
-      {% endif %}
-
-      <!-- Spacer pushes button down -->
-      <div class="mt-auto text-center">
-
-        <a href="{{ sermon.get_absolute_url }}"
-           class="inline-block border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg transition">
-          Watch now →
-        </a>
-
-      </div>
-
-    </div>
-
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Sermons</h1>
+    <p class="text-gray-500 mt-1">Browse recent messages</p>
   </div>
 
-  {% empty %}
-    <p class="col-span-full text-center text-gray-500">
-      No sermons available yet.
-    </p>
-  {% endfor %}
+  <!-- Sermon List -->
+  <div class="space-y-6">
 
+    {% for sermon in object_list %}
+      <a href="{{ sermon.get_absolute_url }} " 
+         class="block group bg-white rounded-2xl border border-gray-200 hover:shadow-md transition overflow-hidden">
+
+        <div class="flex flex-col sm:flex-row">
+
+          <!-- Column 1: Thumbnail -->
+          <div class="sm:w-64 flex-shrink-0 bg-gray-100">
+            <img 
+              src="{{ sermon.thumbnail }}"
+              alt="{{ sermon.name }}"
+              class="w-full h-48 sm:h-full object-cover group-hover:scale-[1.02] transition"
+            >
+          </div>
+
+          <!-- Column 2: Content -->
+          <div class="flex flex-col justify-between p-5 flex-1">
+
+            <div>
+              <!-- Title -->
+              <h2 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition">
+                {{ sermon.title }}
+              </h2>
+              
+              <!-- Meta (optional) -->
+              <p class="text-sm text-gray-400 mt-1">
+                {{ sermon.published_at|date:"M d, Y" }}
+                {% if sermon.series %}
+                  {{ sermon.series.name }}
+                {% endif %}
+              </p>
+
+              <!-- Description -->
+              <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                {{ sermon.description|truncatewords:30 }}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </a>
+    {% empty %}
+      <p class="text-center text-gray-500 py-10">
+        No sermons available yet.
+      </p>
+    {% endfor %}
+
+  </div>
 </div>
+
+
+
 
 {% endblock %}

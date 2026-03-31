@@ -14,15 +14,19 @@
 
   <body class="bg-gray-50 text-gray-900" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
+<div class="h-screen flex overflow-hidden">
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
-      {% block content %}
-      {% endblock %}
-    </main>
+  <!-- Sidebar (fixed) -->
+  <aside class="w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0">
+    {% include "base/sidebar.html" %}
+  </aside>
 
+  <!-- Main Content -->
+  <main class="ml-64 flex-1 h-screen overflow-y-auto scroll-smooth bg-gray-50 p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
     <!-- HTMX Login Check -->
     <div hx-get="/hx/login/" hx-trigger="load"></div>
 
