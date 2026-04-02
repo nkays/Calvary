@@ -1,0 +1,60 @@
+{% comment %}
+Reusable card for Sermon or Series.
+Context:
+- item: Sermon or Series instance
+- type: "sermon" or "series"
+{% endcomment %}
+
+<a href="{{ item.get_absolute_url }}" 
+   class="block group bg-white rounded-2xl border border-gray-200 hover:shadow-md transition overflow-hidden">
+
+  <div class="flex flex-col sm:flex-row">
+
+    <!-- Column 1: Thumbnail -->
+    <div class="sm:w-64 flex-shrink-0 bg-gray-100">
+      {% if type == "sermon" %}
+        <img src="{{ item.thumbnail }}" alt="{{ item.title }}"
+             class="w-full h-48 sm:h-full object-cover group-hover:scale-[1.02] transition">
+      {% elif type == "series" %}
+        <img src="{{ item.sermons.first.thumbnail }}" alt="{{ item.title }}"
+            class="w-full h-48 sm:h-full object-cover group-hover:scale-[1.02] transition">
+      {% endif %}
+    </div>
+
+    <!-- Column 2: Content -->
+    <div class="flex flex-col justify-between p-5 flex-1">
+      <div>
+        <!-- Title -->
+        <h2 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition">
+          {{ item.title }}
+        </h2>
+
+        <!-- Meta -->
+        {% if type == "sermon" %}
+          <p class="text-sm text-gray-400 mt-1">
+            {{ item.published_at|date:"M d, Y" }}
+            {% if item.series %} | {{ item.series.title }}{% endif %}
+          </p>
+        {% elif type == "series" %}
+          <p class="text-sm text-gray-400 mt-1">
+            {{ item.sermons.count }} sermon{{ item.sermons.count|pluralize }}
+          </p>
+        {% endif %}
+
+       <!-- Description -->
+        <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+        {% if type == "series" %}
+            {% if not item.description or item.description|length < 10 %}
+            Description coming soon
+            {% else %}
+            {{ item.description|truncatewords:30 }}
+            {% endif %}
+        {% else %}
+            {{ item.description|truncatewords:30 }}
+        {% endif %}
+        </p>
+      </div>
+    </div>
+
+  </div>
+</a>

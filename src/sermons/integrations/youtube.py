@@ -9,18 +9,26 @@ def get_youtube_client():
     return build("youtube", "v3", developerKey=config("YOUTUBE_API_KEY"))
 
 
-# youtube.py/normalize_video_data/helper
+# src/sermons/youtube.py/normalize_video_data/helper
 def normalize_video_data(item):
     snippet = item.get("snippet", {})
-    resource = snippet.get("resourceId", {})
+
+    video_id = None
+
+    # Primary: playlistItems structure
+    resource = snippet.get("resourceId")
+    if resource:
+        video_id = resource.get("videoId")
+
+    # Fallback (defensive)
+    if not video_id:
+        video_id = snippet.get("videoId")
 
     return {
         "title": snippet.get("title"),
-        "youtube_id": resource.get("videoId"),
+        "youtube_id": video_id,
         "description": snippet.get("description"),
         "published_at": snippet.get("publishedAt"),
-
-
     }
 
 
@@ -194,6 +202,7 @@ def sync_uploads_to_sermons(channel_id):
     created = []
     updated = []
 
+    # src/sermons/youtube.py/sync_uploads_to_sermons/core-sync
     for video in videos:
         obj, was_created = Sermon.objects.update_or_create(
             youtube_id=video["youtube_id"],
@@ -203,16 +212,82 @@ def sync_uploads_to_sermons(channel_id):
                 "published_at": parse_datetime(video["published_at"]) 
                     if video["published_at"] else None,
                 "status": "published",
-            },
-            create_defaults={  # ✅ ADD THIS
                 "series": standalone_series,
             }
         )
 
         # ✅ ONLY assign series if NEW
         if was_created:
-            obj.series = standalone_series
-            obj.save(update_fields=["series"])
+            created.append(obj)
+        else:
+            updated.append(obj)
+
+    return {
+        "created": created,
+        "updated": updated,
+    }
+# src/sermons/youtube.py/collect_video_map
+def collect_video_map(channel_id):
+    """
+    Returns:
+        {
+            youtube_id: {
+                "title": ...,
+                "description": ...,
+                "published_at": ...,
+                "series": Series instance
+            }
+        }
+    """
+    video_map = {}
+
+    # 🔹 1. Get standalone series
+    standalone_series = get_standalone_series()
+
+    # 🔹 2. Get uploads playlist
+    uploads_playlist_id = get_uploads_playlist_id(channel_id)
+
+    if uploads_playlist_id:
+        uploads = get_playlist_videos(uploads_playlist_id)
+
+        for video in uploads:
+            video_map[video["youtube_id"]] = {
+                **video,
+                "series": standalone_series
+            }
+
+    # 🔹 3. Get all Series (playlists)
+    for series in Series.objects.exclude(youtube_playlist_id__isnull=True):
+        videos = get_playlist_videos(series.youtube_playlist_id)
+
+        for video in videos:
+            # 🔥 Playlist overrides uploads
+            video_map[video["youtube_id"]] = {
+                **video,
+                "series": series
+            }
+
+    return video_map
+
+# src/sermons/youtube.py/ingest_videos
+def ingest_videos(video_map):
+    created = []
+    updated = []
+
+    for youtube_id, video in video_map.items():
+        obj, was_created = Sermon.objects.update_or_create(
+            youtube_id=youtube_id,
+            defaults={
+                "title": video["title"],
+                "description": video["description"],
+                "published_at": parse_datetime(video["published_at"]) 
+                    if video["published_at"] else None,
+                "series": video["series"],
+                "status": "published",
+            }
+        )
+
+        if was_created:
             created.append(obj)
         else:
             updated.append(obj)
@@ -222,29 +297,23 @@ def sync_uploads_to_sermons(channel_id):
         "updated": updated,
     }
 
+# src/sermons/youtube.py/full_sync_channel/orchestrator
 def full_sync_channel(channel_id):
     if not channel_id:
         raise ValueError("A valid channel_id is required")
 
-    # Step 1: Sync playlists → Series
+    # 🔹 1. Sync playlists → Series
     series_result = sync_channel_to_series(channel_id)
 
-    # Step 2: Sync each Series → Sermons
-    sermon_created_total = 0
-    sermon_updated_total = 0
+    # 🔹 2. Collect ALL videos (uploads + playlists)
+    video_map = collect_video_map(channel_id)
 
-    for series in Series.objects.exclude(youtube_playlist_id__isnull=True):
-        result = sync_playlist_to_series(series)
-
-        sermon_created_total += len(result["created"])
-        sermon_updated_total += len(result["updated"])
-    
-    # 3. 🔥 Sync uploads (non-playlist videos)
-    uploads_result = sync_uploads_to_sermons(channel_id)
+    # 🔹 3. Ingest once
+    result = ingest_videos(video_map)
 
     return {
         "series_created": len(series_result["created"]),
         "series_updated": len(series_result["updated"]),
-        "sermons_created": sermon_created_total + len(uploads_result["created"]),
-        "sermons_updated": sermon_updated_total + len(uploads_result["updated"]),
+        "sermons_created": len(result["created"]),
+        "sermons_updated": len(result["updated"]),
     }

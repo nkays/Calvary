@@ -1,17 +1,25 @@
 {% extends "base/tail.html" %}
 
-{% block head_title %}
-Sermons | Calvary Chapel Eastern CT
-{% endblock %}
-
 {% block content %}
+<div class="max-w-5xl mx-auto px-4 py-10">
 
-<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">{{ page_title }}</h1>
+    <p class="text-gray-500 mt-1">{{ page_subtitle }}</p>
+  </div>
 
-  <h1 class="text-3xl font-bold mb-8">Series</h1>
+  <!-- List -->
+  <div class="space-y-6">
 
-  {% include "pages/sermons/snippets/list-display.html" with queryset=object_list %}
+    {% for item in object_list %}
+      {% include "pages/sermons/snippets/_card.html" with item=item type=object_type %}
+    {% empty %}
+      <p class="text-center text-gray-500 py-10">
+        No {{ object_type }} available yet.
+      </p>
+    {% endfor %}
 
+  </div>
 </div>
-
 {% endblock %}

@@ -5,15 +5,16 @@ from .models import Sermon, Series
 from django.conf import settings
 from . import services
 
+
 # Create your views here.
-def series_list(request):
-    queryset = services.get_series()
-    print(queryset)
-    # return JsonResponse({"data": [x.path for x in queryset]})
-    context = {
-        'object_list': queryset
-    }
-    return render(request, 'pages/sermons/list.html', context)
+# def series_list(request):
+#     queryset = services.get_series()
+#     print(queryset)
+#     # return JsonResponse({"data": [x.path for x in queryset]})
+#     context = {
+#         'object_list': queryset
+#     }
+#     return render(request, 'pages/sermons/list.html', context)
 
 def series_detail(request, series_id=None, *args, **kwargs):
     series_obj = services.get_series_detail(series_id=series_id)
@@ -27,12 +28,12 @@ def series_detail(request, series_id=None, *args, **kwargs):
     # return JsonResponse({"data": [x.id for x in sermons_queryset]})
     return render(request, 'pages/sermons/detail.html', context)
   
-def sermon_list(request):
-    queryset = Sermon.objects.all()
-    context = {
-        'object_list': queryset
-    }
-    return render(request, 'pages/sermon_list.html', context)
+# def sermon_list(request):
+#     queryset = Sermon.objects.all()
+#     context = {
+#         'object_list': queryset
+#     }
+#     return render(request, 'pages/sermon_list.html', context)
 
 def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
     print(series_id, sermon_id)
@@ -50,3 +51,22 @@ def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
 
    
         
+
+
+def sermon_list(request):
+    sermons = Sermon.objects.all()
+    return render(request, "pages/sermons/list.html", {
+        "object_list": sermons,
+        "object_type": "sermon",
+        "page_title": "Sermons",
+        "page_subtitle": "Browse recent messages",
+    })
+
+def series_list(request):
+    series = Series.objects.prefetch_related("sermons").all()
+    return render(request, "pages/sermons/list.html", {
+        "object_list": series,
+        "object_type": "series",
+        "page_title": "Series",
+        "page_subtitle": "Browse sermon series",
+    })
