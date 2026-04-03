@@ -1,7 +1,12 @@
-<aside id="sidebar-el" class="fixed top-0 left-0 z-40 h-screen w-64 transition-all duration-300 -translate-x-full lg:translate-x-0 bg-white border-r border-gray-200">
+<aside id="sidebar-el" class="fixed top-0 left-0 z-40 h-screen 
+       w-64 lg:w-64 lg:flex-shrink-0
+       transition-all duration-300 ease-in-out
+       -translate-x-full lg:translate-x-0 
+       lg:static
+       bg-white border-r border-gray-200">
   <div class="h-full flex flex-col">
     
-    <div class="flex items-center gap-3 py-5 px-4 border-b border-gray-100 overflow-hidden">
+    <div class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group justify-start lg:justify-start">
       <img src="https://avatars.planningcenteronline.com/uploads/organization/206582-1469590946/avatar.1.jpg" 
            class="h-8 w-8 min-w-[32px] rounded" alt="Logo">
       <span class="nav-label text-xl font-semibold whitespace-nowrap">Calvary</span>
@@ -21,3 +26,4 @@
     
   </div>
 </aside>
+

@@ -13,15 +13,17 @@
   </head>
 
 <body class="bg-gray-50 text-gray-900 overflow-hidden">
-  <div class="flex h-screen overflow-hidden">
+  <div class="flex h-screen">
     
     {% include "base/sidebar.html" %}
 
-    <main id="main-content" class="flex-1 transition-all duration-300 lg:ml-64 h-screen overflow-y-auto p-6">
+    <main id="main-content" class="flex-1 transition-all duration-300 h-screen overflow-y-auto p-6">
       
-      <button onclick="toggleSidebar()" class="mb-4 p-2 rounded-lg hover:bg-gray-200">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-      </button>
+      <div class="flex items-center gap-2 mb-4">
+        <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-200">
+          ☰
+        </button>
+      </div>
 
       {% block content %}{% endblock %}
     </main>
@@ -30,19 +32,14 @@
   <script>
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar-el');
-      const main = document.getElementById('main-content');
-      
-      // On Desktop: Toggle between w-64 and w-20
+
       if (window.innerWidth >= 1024) {
         sidebar.classList.toggle('lg:w-64');
         sidebar.classList.toggle('lg:w-20');
-        main.classList.toggle('lg:ml-64');
-        main.classList.toggle('lg:ml-20');
-        
-        // Hide/Show text labels
-        document.querySelectorAll('.nav-label').forEach(el => el.classList.toggle('hidden'));
+
+        document.querySelectorAll('#sidebar-el nav a')
+          .forEach(el => el.classList.toggle('justify-center'));
       } else {
-        // On Mobile: Use Flowbite's drawer toggle logic or simple translate
         sidebar.classList.toggle('-translate-x-full');
       }
     }
