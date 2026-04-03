@@ -24,7 +24,7 @@ def landing_page_entry_list_view(request, *args, **kwargs):
         "object_list": qs,
     }
     
-    return render(request, "pages/list.html", context)
+    return render(request, "pages/landing_list.html", context)
 
 def entry_list_notes_view(request, *args, **kwargs):
     qs = LandingPageEntry.objects.none()
@@ -35,7 +35,7 @@ def entry_list_notes_view(request, *args, **kwargs):
         "object_list": qs,
     }
     
-    return render(request, "pages/list.html", context)
+    return render(request, "pages/landing_list.html", context)
 
 
 def landing_page_entry_detail_view(request, *args, **kwargs):
@@ -49,7 +49,7 @@ def landing_page_entry_detail_view(request, *args, **kwargs):
     context = {
         "object": qs.first(),
     }
-    return render(request, "pages/detail.html", context)
+    return render(request, "pages/landing_detail.html", context)
 
 
 
@@ -70,7 +70,7 @@ def home_page(request, *args, **kwargs):
         
     }
     
-    return render(request, "pages/home.html", context)
+    return render(request, "pages/home/home.html", context)
 
 def connect_form_view(request, *args, **kwargs):
     title = "Calvary Chapel Eastern Connecticut"   

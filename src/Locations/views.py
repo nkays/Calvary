@@ -9,7 +9,7 @@ from .models import Location
 
 class LocationListView(ListView):
     model = Location
-    template_name = 'pages/location_list.html'  # we'll create this next
+    template_name = 'pages/locations/location_list.html'  # we'll create this next
     context_object_name = 'locations'               # nicer than default 'object_list'
     ordering = ['order', 'title']                   # match your model's Meta ordering
     

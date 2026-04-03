@@ -33,7 +33,7 @@ def series_detail(request, series_id=None, *args, **kwargs):
 #     context = {
 #         'object_list': queryset
 #     }
-#     return render(request, 'pages/sermon_list.html', context)
+#     return render(request, 'pages/sermons/sermon_list.html', context)
 
 def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
     print(series_id, sermon_id)
@@ -47,7 +47,7 @@ def sermon_detail(request, series_id=None, sermon_id=None, *args, **kwargs):
     if sermon_obj is None:
         raise Http404("Sermon not found")
     
-    return render(request, 'pages/sermon_detail.html', context)
+    return render(request, 'pages/sermons/sermon_detail.html', context)
 
    
         

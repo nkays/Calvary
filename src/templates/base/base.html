@@ -1,22 +1,51 @@
+{% load static tailwind_tags %}
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" >
-    <title>{% block title %}{{ title}}{% endblock %}</title>
-    
-    {% include 'base/css.html' %}
-  </head>
-  <body>
-    {% include 'base/navbar.html' %}
-    <div class="container-fluid"style="background-color: #bfcff7;">
-    {% block content %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    {% endblock %}
-    {% include 'base/footer.html' %}
-    </div>
- 
-    {% include 'base/js.html' %}
+    {% tailwind_css %}
+
+    <title>{% block head_title %}Calvary Chapel Eastern CT{% endblock %}</title>
+  </head>
+
+<body class="bg-gray-50 text-gray-900 overflow-hidden">
+  <div class="flex h-screen overflow-hidden">
+    
+    {% include "base/sidebar.html" %}
+
+    <main id="main-content" class="flex-1 transition-all duration-300 lg:ml-64 h-screen overflow-y-auto p-6">
+      
+      <button onclick="toggleSidebar()" class="mb-4 p-2 rounded-lg hover:bg-gray-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar-el');
+      const main = document.getElementById('main-content');
+      
+      // On Desktop: Toggle between w-64 and w-20
+      if (window.innerWidth >= 1024) {
+        sidebar.classList.toggle('lg:w-64');
+        sidebar.classList.toggle('lg:w-20');
+        main.classList.toggle('lg:ml-64');
+        main.classList.toggle('lg:ml-20');
+        
+        // Hide/Show text labels
+        document.querySelectorAll('.nav-label').forEach(el => el.classList.toggle('hidden'));
+      } else {
+        // On Mobile: Use Flowbite's drawer toggle logic or simple translate
+        sidebar.classList.toggle('-translate-x-full');
+      }
+    }
+  </script>
   </body>
 </html>
