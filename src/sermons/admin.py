@@ -23,7 +23,7 @@ class SermonMediaMixin:
             return "No video"
 
         rendered = render_to_string(
-            "pages/snippets/embed.html",
+            "pages/sermons/snippets/embed.html",
             {
                 "embed_url": obj.embed_url,
                 "thumbnail_url": obj.thumbnail,
