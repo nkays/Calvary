@@ -18,9 +18,10 @@
     {% include "base/sidebar.html" %}
 
     <main id="main-content" class="flex-1 transition-all duration-300 h-screen overflow-y-auto p-6">
-      
+      <!-- templates/base.html (button wrapper) -->
       <div class="flex items-center gap-2 mb-4">
-        <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-gray-200">
+      <!-- Mobile toggle ONLY -->
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-gray-200">
           ☰
         </button>
       </div>
@@ -29,13 +30,23 @@
     </main>
   </div>
 
+
+<!-- templates/base.html (toggleSidebar function) -->
   <script>
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar-el');
+      const labels = document.querySelectorAll('.nav-label');
 
       if (window.innerWidth >= 1024) {
-        sidebar.classList.toggle('lg:w-64');
-        sidebar.classList.toggle('lg:w-20');
+        sidebar.classList.toggle('w-64');
+        sidebar.classList.toggle('w-20');
+
+        labels.forEach(el => {
+          el.classList.toggle('opacity-0');
+          el.classList.toggle('w-0');
+          el.classList.toggle('overflow-hidden');
+          el.classList.toggle('justify-center');
+        });
 
         document.querySelectorAll('#sidebar-el nav a')
           .forEach(el => el.classList.toggle('justify-center'));

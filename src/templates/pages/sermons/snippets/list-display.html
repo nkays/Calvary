@@ -1,0 +1,51 @@
+ <div class="space-y-6">
+
+    {% for sermon in object_list %}
+      <a href="{{ sermon.get_absolute_url }} " 
+         class="block group bg-white rounded-2xl border border-gray-200 hover:shadow-md transition overflow-hidden">
+
+        <div class="flex flex-col sm:flex-row">
+
+          <!-- Column 1: Thumbnail -->
+          <div class="sm:w-64 flex-shrink-0 bg-gray-100">
+            <img 
+              src="{{ sermon.thumbnail }}"
+              alt="{{ sermon.name }}"
+              class="w-full h-48 sm:h-full object-cover group-hover:scale-[1.02] transition"
+            >
+          </div>
+
+          <!-- Column 2: Content -->
+          <div class="flex flex-col justify-between p-5 flex-1">
+
+            <div>
+              <!-- Title -->
+              <h2 class="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition">
+                {{ sermon.title }}
+              </h2>
+              
+              <!-- Meta (optional) -->
+              <p class="text-sm text-gray-400 mt-1">
+                {{ sermon.published_at|date:"M d, Y" }}
+                {% if sermon.series %}
+                  {{ sermon.series.name }}
+                {% endif %}
+              </p>
+
+              <!-- Description -->
+              <p class="text-gray-600 text-sm mt-3 line-clamp-3">
+                {{ sermon.description|truncatewords:30 }}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </a>
+    {% empty %}
+      <p class="text-center text-gray-500 py-10">
+        No sermons available yet.
+      </p>
+    {% endfor %}
+
+  </div>
