@@ -70,3 +70,21 @@ def series_list(request):
         "page_title": "Series",
         "page_subtitle": "Browse sermon series",
     })
+
+def sermon_by_series_list(request, series_id=None, sermon_id=None, *args, **kwargs):
+    series_obj = services.get_series_detail(series_id=series_id)
+    if series_obj is None:
+        raise Http404("Series not found")
+    sermons_queryset = services.get_sermons_by_series(series_obj)
+    context = {
+        'object': series_obj,
+        
+        "object_list": sermons_queryset,
+        "object_type": "series_sermon",
+        "page_title": Series.title,
+        "page_subtitle": "Browse sermon series",
+    }
+    print(object_list)
+    print(sermons_queryset)
+    return JsonResponse({"data": [x.id for x in sermons_queryset]})
+    # return render(request, "pages/sermons/list.html", context)
