@@ -32,28 +32,100 @@
 
 
 <!-- templates/base.html (toggleSidebar function) -->
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar-el');
-      const labels = document.querySelectorAll('.nav-label');
+<script>
+function syncSidebarState() {
+  const sidebar = document.getElementById('sidebar-el');
+  const texts = document.querySelectorAll('.sidebar-text');
+  const navItems = document.querySelectorAll('.nav-item');
 
-      if (window.innerWidth >= 1024) {
-        sidebar.classList.toggle('w-64');
-        sidebar.classList.toggle('w-20');
+  const isDesktop = window.innerWidth >= 1024;
 
-        labels.forEach(el => {
-          el.classList.toggle('opacity-0');
-          el.classList.toggle('w-0');
-          el.classList.toggle('overflow-hidden');
-          el.classList.toggle('justify-center');
-        });
+  if (isDesktop) {
+    // ✅ FORCE DESKTOP VISIBLE
+    sidebar.classList.remove('-translate-x-full');
 
-        document.querySelectorAll('#sidebar-el nav a')
-          .forEach(el => el.classList.toggle('justify-center'));
-      } else {
-        sidebar.classList.toggle('-translate-x-full');
-      }
+    const isCollapsed = sidebar.classList.contains('w-20');
+
+    if (isCollapsed) {
+      texts.forEach(el => {
+        el.classList.add('opacity-0');
+        el.classList.add('pointer-events-none');
+      });
+
+      navItems.forEach(el => {
+        el.classList.add('justify-center');
+      });
+
+    } else {
+      texts.forEach(el => {
+        el.classList.remove('opacity-0');
+        el.classList.remove('pointer-events-none');
+      });
+
+      navItems.forEach(el => {
+        el.classList.remove('justify-center');
+      });
     }
-  </script>
+
+  } else {
+    // 📱 MOBILE DEFAULT = HIDDEN
+    sidebar.classList.add('-translate-x-full');
+  }
+}
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar-el');
+  const texts = document.querySelectorAll('.sidebar-text');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const isDesktop = window.innerWidth >= 1024;
+
+  if (isDesktop) {
+    const isCollapsed = sidebar.classList.contains('w-20');
+
+    if (isCollapsed) {
+      // 🔓 EXPAND
+      sidebar.classList.remove('w-20');
+      sidebar.classList.add('w-64');
+
+      document.getElementById('sidebar-header')
+        .classList.remove('justify-center');
+
+      texts.forEach(el => {
+        el.classList.remove('hidden');
+      });
+
+      navItems.forEach(el => {
+        el.classList.remove('justify-center');
+        el.classList.add('gap-3');
+      });
+
+    } else {
+      // 🔒 COLLAPSE
+      sidebar.classList.remove('w-64');
+      sidebar.classList.add('w-20');
+
+      document.getElementById('sidebar-header')
+        .classList.remove('justify-center');
+
+      texts.forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      navItems.forEach(el => {
+        el.classList.add('justify-center');
+        el.classList.remove('gap-3');
+      });
+    }
+
+  } else {
+    // 📱 MOBILE TOGGLE
+    sidebar.classList.toggle('-translate-x-full');
+  }
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', syncSidebarState);
+window.addEventListener('resize', syncSidebarState);
+</script>
   </body>
 </html>
