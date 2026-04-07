@@ -10,43 +10,38 @@
 
     <!-- HEADER -->
     <div id="sidebar-header"
-        onclick="toggleSidebar()"
-        class="group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-all">
+         onclick="toggleSidebar()"
+         class="group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-all">
 
       <!-- Logo -->
       <img src="https://avatars.planningcenteronline.com/uploads/organization/206582-1469590946/avatar.1.jpg"
-          class="h-8 w-8 min-w-[32px] rounded" alt="Logo">
+           class="h-8 w-8 min-w-[32px] rounded" alt="Logo">
 
-      <!-- Text -->
-      
-      <span class="sidebar-text font-semibold whitespace-nowrap">
+      <!-- Text (fade) -->
+      <span class="sidebar-text font-semibold whitespace-nowrap transition-opacity duration-200">
         Calvary Chapel
       </span>
-      
-
-      {% comment %} <!-- Hover icon -->
-      <span class="ml-auto opacity-0 group-hover:opacity-100 transition text-gray-400"></span> {% endcomment %}
 
     </div>
 
+    <!-- NAVIGATION -->
     <nav class="flex-1 px-3 py-4 space-y-2">
 
       <a href="{% url 'sermon_list' %}"
-        class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
-        
+         class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
+
         <span class="text-xl">📖</span>
-        <span class="sidebar-text whitespace-nowrap">Sermons</span>
+        <span class="sidebar-text whitespace-nowrap transition-opacity duration-200">Sermons</span>
       </a>
 
       <a href="{% url 'series_list' %}"
-        class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
-        
+         class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
+
         <span class="text-xl">📖</span>
-        <span class="sidebar-text whitespace-nowrap">Series</span>
+        <span class="sidebar-text whitespace-nowrap transition-opacity duration-200">Series</span>
       </a>
 
     </nav>
     
   </div>
 </aside>
-

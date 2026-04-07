@@ -8,7 +8,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     {% tailwind_css %}
-
+    <style>
+    /* Sidebar collapsed state applied before JS runs */
+    .sidebar-collapsed #sidebar-el {
+      width: 5rem; /* same as Tailwind w-20 */
+    }
+    </style>
     <title>{% block head_title %}Calvary Chapel Eastern CT{% endblock %}</title>
   </head>
 
@@ -33,49 +38,78 @@
 
 <!-- templates/base.html (toggleSidebar function) -->
 <script>
+const STORAGE_KEY = 'sidebarCollapsed';
+const savedState = localStorage.getItem(STORAGE_KEY);
+
+if (savedState === 'true') {
+  document.documentElement.classList.add('sidebar-collapsed');
+}
 function syncSidebarState() {
   const sidebar = document.getElementById('sidebar-el');
   const texts = document.querySelectorAll('.sidebar-text');
   const navItems = document.querySelectorAll('.nav-item');
+  const header = document.getElementById('sidebar-header');
+
 
   const isDesktop = window.innerWidth >= 1024;
 
+  let isCollapsed;
+
+  if (savedState !== null) {
+    isCollapsed = savedState === 'true';
+  } else {
+    isCollapsed = true; // default
+  }
+
   if (isDesktop) {
-    // ✅ FORCE DESKTOP VISIBLE
     sidebar.classList.remove('-translate-x-full');
 
-    const isCollapsed = sidebar.classList.contains('w-20');
+    // ✅ enforce width from saved state
+    if (isCollapsed) {
+      sidebar.classList.remove('w-64');
+      sidebar.classList.add('w-20');
+    } else {
+      sidebar.classList.remove('w-20');
+      sidebar.classList.add('w-64');
+    }
 
     if (isCollapsed) {
+      header.classList.add('justify-center');
+
       texts.forEach(el => {
-        el.classList.add('opacity-0');
-        el.classList.add('pointer-events-none');
+        el.classList.add('opacity-0', 'pointer-events-none'); // hide with fade
+        el.classList.remove('opacity-100');                   // ensure opacity-100 removed
       });
 
       navItems.forEach(el => {
         el.classList.add('justify-center');
+        el.classList.remove('gap-3');
       });
 
     } else {
+      header.classList.remove('justify-center');
+
       texts.forEach(el => {
-        el.classList.remove('opacity-0');
-        el.classList.remove('pointer-events-none');
+        el.classList.remove('opacity-0', 'pointer-events-none'); // fade in
+        el.classList.add('opacity-100');                          // ensure fully visible
       });
 
       navItems.forEach(el => {
         el.classList.remove('justify-center');
+        el.classList.add('gap-3');
       });
     }
 
   } else {
-    // 📱 MOBILE DEFAULT = HIDDEN
     sidebar.classList.add('-translate-x-full');
   }
 }
 function toggleSidebar() {
+  const STORAGE_KEY = 'sidebarCollapsed';
   const sidebar = document.getElementById('sidebar-el');
   const texts = document.querySelectorAll('.sidebar-text');
   const navItems = document.querySelectorAll('.nav-item');
+  const header = document.getElementById('sidebar-header');
 
   const isDesktop = window.innerWidth >= 1024;
 
@@ -84,14 +118,15 @@ function toggleSidebar() {
 
     if (isCollapsed) {
       // 🔓 EXPAND
+      localStorage.setItem(STORAGE_KEY, 'false');
       sidebar.classList.remove('w-20');
       sidebar.classList.add('w-64');
 
-      document.getElementById('sidebar-header')
-        .classList.remove('justify-center');
+      header.classList.remove('justify-center');
 
       texts.forEach(el => {
-        el.classList.remove('hidden');
+        el.classList.remove('opacity-0', 'pointer-events-none'); // fade in
+        el.classList.add('opacity-100');                          // ensure fully visible
       });
 
       navItems.forEach(el => {
@@ -101,14 +136,15 @@ function toggleSidebar() {
 
     } else {
       // 🔒 COLLAPSE
+      localStorage.setItem(STORAGE_KEY, 'true');
       sidebar.classList.remove('w-64');
       sidebar.classList.add('w-20');
 
-      document.getElementById('sidebar-header')
-        .classList.remove('justify-center');
+      header.classList.add('justify-center');
 
       texts.forEach(el => {
-        el.classList.add('hidden');
+        el.classList.add('opacity-0', 'pointer-events-none'); // hide with fade
+        el.classList.remove('opacity-100');                   // ensure opacity-100 removed
       });
 
       navItems.forEach(el => {
