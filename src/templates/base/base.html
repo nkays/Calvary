@@ -1,167 +1,75 @@
-{% load static tailwind_tags %}
-
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Sermon App{% endblock %}</title>
 
-    {% tailwind_css %}
-    <style>
-    /* Sidebar collapsed state applied before JS runs */
-    .sidebar-collapsed #sidebar-el {
-      width: 5rem; /* same as Tailwind w-20 */
-    }
-    </style>
-    <title>{% block head_title %}Calvary Chapel Eastern CT{% endblock %}</title>
-  </head>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<body class="bg-gray-50 text-gray-900 overflow-hidden">
-  <div class="flex h-screen">
-    
-    {% include "base/sidebar.html" %}
+  <!-- Flowbite -->
+  <script src="{% static 'js/flowbite.min.js' %}"></script>
+</head>
 
-    <main id="main-content" class="flex-1 transition-all duration-300 h-screen overflow-y-auto p-6">
-      <!-- templates/base.html (button wrapper) -->
-      <div class="flex items-center gap-2 mb-4">
-      <!-- Mobile toggle ONLY -->
-        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-gray-200">
-          ☰
-        </button>
-      </div>
+<body class="bg-gray-50">
 
-      {% block content %}{% endblock %}
-    </main>
-  </div>
+<!-- MOBILE TOP BAR -->
+<nav class="lg:hidden flex items-center justify-between p-4 bg-white border-b">
+  
+  <!-- Mobile Toggle (Flowbite) -->
+  <button type="button"
+    class="inline-flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100"
+    data-drawer-target="default-sidebar"
+    data-drawer-toggle="default-sidebar">
+    ☰
+  </button>
 
+  <span class="font-semibold">Sermon App</span>
+</nav>
 
-<!-- templates/base.html (toggleSidebar function) -->
+<!-- LAYOUT -->
+<div class="flex">
+
+  <!-- SIDEBAR -->
+  {% include "base/sidebar.html" %}
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content"
+    class="flex-1 p-6 transition-all duration-300">
+
+    {% block content %}
+    {% endblock %}
+
+  </main>
+
+</div>
+
+<!-- DESKTOP COLLAPSE SCRIPT -->
 <script>
-const STORAGE_KEY = 'sidebarCollapsed';
-const savedState = localStorage.getItem(STORAGE_KEY);
+  const sidebar = document.getElementById('default-sidebar');
+  const btn = document.getElementById('sidebarCollapseBtn');
+  const labels = document.querySelectorAll('.nav-label');
 
-if (savedState === 'true') {
-  document.documentElement.classList.add('sidebar-collapsed');
-}
-function syncSidebarState() {
-  const sidebar = document.getElementById('sidebar-el');
-  const texts = document.querySelectorAll('.sidebar-text');
-  const navItems = document.querySelectorAll('.nav-item');
-  const header = document.getElementById('sidebar-header');
+  let isCollapsed = false;
 
+  btn?.addEventListener('click', () => {
+    isCollapsed = !isCollapsed;
 
-  const isDesktop = window.innerWidth >= 1024;
+    // Toggle width
+    sidebar.classList.toggle('w-64');
+    sidebar.classList.toggle('w-20');
 
-  let isCollapsed;
+    // Toggle label visibility
+    labels.forEach(label => {
+      label.classList.toggle('hidden');
+    });
 
-  if (savedState !== null) {
-    isCollapsed = savedState === 'true';
-  } else {
-    isCollapsed = true; // default
-  }
-
-  if (isDesktop) {
-    sidebar.classList.remove('-translate-x-full');
-
-    // ✅ enforce width from saved state
-    if (isCollapsed) {
-      sidebar.classList.remove('w-64');
-      sidebar.classList.add('w-20');
-    } else {
-      sidebar.classList.remove('w-20');
-      sidebar.classList.add('w-64');
-    }
-
-    if (isCollapsed) {
-      header.classList.add('justify-center');
-
-      texts.forEach(el => {
-        el.classList.add('opacity-0', 'pointer-events-none'); // hide with fade
-        el.classList.remove('opacity-100');                   // ensure opacity-100 removed
-      });
-
-      navItems.forEach(el => {
-        el.classList.add('justify-center');
-        el.classList.remove('gap-3');
-      });
-
-    } else {
-      header.classList.remove('justify-center');
-
-      texts.forEach(el => {
-        el.classList.remove('opacity-0', 'pointer-events-none'); // fade in
-        el.classList.add('opacity-100');                          // ensure fully visible
-      });
-
-      navItems.forEach(el => {
-        el.classList.remove('justify-center');
-        el.classList.add('gap-3');
-      });
-    }
-
-  } else {
-    sidebar.classList.add('-translate-x-full');
-  }
-}
-function toggleSidebar() {
-  const STORAGE_KEY = 'sidebarCollapsed';
-  const sidebar = document.getElementById('sidebar-el');
-  const texts = document.querySelectorAll('.sidebar-text');
-  const navItems = document.querySelectorAll('.nav-item');
-  const header = document.getElementById('sidebar-header');
-
-  const isDesktop = window.innerWidth >= 1024;
-
-  if (isDesktop) {
-    const isCollapsed = sidebar.classList.contains('w-20');
-
-    if (isCollapsed) {
-      // 🔓 EXPAND
-      localStorage.setItem(STORAGE_KEY, 'false');
-      sidebar.classList.remove('w-20');
-      sidebar.classList.add('w-64');
-
-      header.classList.remove('justify-center');
-
-      texts.forEach(el => {
-        el.classList.remove('opacity-0', 'pointer-events-none'); // fade in
-        el.classList.add('opacity-100');                          // ensure fully visible
-      });
-
-      navItems.forEach(el => {
-        el.classList.remove('justify-center');
-        el.classList.add('gap-3');
-      });
-
-    } else {
-      // 🔒 COLLAPSE
-      localStorage.setItem(STORAGE_KEY, 'true');
-      sidebar.classList.remove('w-64');
-      sidebar.classList.add('w-20');
-
-      header.classList.add('justify-center');
-
-      texts.forEach(el => {
-        el.classList.add('opacity-0', 'pointer-events-none'); // hide with fade
-        el.classList.remove('opacity-100');                   // ensure opacity-100 removed
-      });
-
-      navItems.forEach(el => {
-        el.classList.add('justify-center');
-        el.classList.remove('gap-3');
-      });
-    }
-
-  } else {
-    // 📱 MOBILE TOGGLE
-    sidebar.classList.toggle('-translate-x-full');
-  }
-}
+    // Center header when collapsed
+    document.getElementById('sidebar-header')
+      .classList.toggle('justify-center', isCollapsed);
+  });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', syncSidebarState);
-window.addEventListener('resize', syncSidebarState);
-</script>
-  </body>
+
+</body>
 </html>

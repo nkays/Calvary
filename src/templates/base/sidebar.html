@@ -1,47 +1,60 @@
-<aside id="sidebar-el"
+<aside id="default-sidebar"
   class="fixed top-0 left-0 z-40 h-screen
-         w-64
          transition-all duration-300 ease-in-out
          -translate-x-full lg:translate-x-0
          lg:static
-         bg-white border-r border-gray-200">
+         bg-white border-r border-gray-200
+         w-64 sidebar-collapsed:w-20 flex flex-col"
+  aria-label="Sidebar">
 
-  <div class="flex-1 px-3 py-4 space-y-2">
+  <!-- HEADER -->
+  <div id="sidebar-header"
+       class="flex items-center justify-between px-4 py-3 border-b">
 
-    <!-- HEADER -->
-    <div id="sidebar-header"
-         onclick="toggleSidebar()"
-         class="group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-all">
+    <!-- Logo -->
+    <span class="text-lg font-semibold whitespace-nowrap nav-label">
+      Sermon App
+    </span>
 
-      <!-- Logo -->
-      <img src="https://avatars.planningcenteronline.com/uploads/organization/206582-1469590946/avatar.1.jpg"
-           class="h-8 w-8 min-w-[32px] rounded" alt="Logo">
-
-      <!-- Text (fade) -->
-      <span class="sidebar-text font-semibold whitespace-nowrap transition-opacity duration-200">
-        Calvary Chapel
-      </span>
-
-    </div>
-
-    <!-- NAVIGATION -->
-    <nav class="flex-1 px-3 py-4 space-y-2">
-
-      <a href="{% url 'sermon_list' %}"
-         class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
-
-        <span class="text-xl">📖</span>
-        <span class="sidebar-text whitespace-nowrap transition-opacity duration-200">Sermons</span>
-      </a>
-
-      <a href="{% url 'series_list' %}"
-         class="nav-item flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
-
-        <span class="text-xl">📖</span>
-        <span class="sidebar-text whitespace-nowrap transition-opacity duration-200">Series</span>
-      </a>
-
-    </nav>
-    
+    <!-- Desktop Collapse Button -->
+    <button id="sidebarCollapseBtn"
+      class="hidden lg:flex items-center justify-center w-8 h-8 rounded hover:bg-gray-100">
+      ☰
+    </button>
   </div>
+
+  <!-- NAV -->
+  <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto">
+
+    <a href="{% url 'sermon_list' %}"
+       class="flex items-center p-2 rounded-lg hover:bg-gray-100 group">
+      <span class="text-xl">🎤</span>
+      <span class="ml-3 nav-label">Sermons</span>
+    </a>
+
+    <a href="#"
+       class="flex items-center p-2 rounded-lg hover:bg-gray-100 group">
+      <span class="text-xl">📚</span>
+      <span class="ml-3 nav-label">Series</span>
+    </a>
+
+    <!-- Example Dropdown (Flowbite) -->
+    <button type="button"
+      class="flex items-center w-full p-2 rounded-lg hover:bg-gray-100 group"
+      data-collapse-toggle="dropdown-pages">
+      <span class="text-xl">⚙️</span>
+      <span class="flex-1 ml-3 text-left nav-label">Settings</span>
+    </button>
+
+    <ul id="dropdown-pages" class="hidden py-2 space-y-2">
+      <li>
+        <a href="#"
+           class="flex items-center w-full p-2 pl-11 rounded-lg hover:bg-gray-100 nav-label">
+          Profile
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
 </aside>
