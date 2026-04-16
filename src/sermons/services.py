@@ -22,18 +22,16 @@ def get_series_detail(series_id=None):
 def get_sermons_by_series(series):
     return series.sermons.filter(access='anyone')
 
-def get_sermon_detail(series_id=None, sermon_id=None):
-    if sermon_id is None or series_id is None:
-        return None
-    obj = None
+def get_sermon_detail(series_slug=None, youtube_id=None):
+    from .models import Sermon
+
     try:
-        obj = Sermon.objects.get(
-            youtube_id=sermon_id,
-            series__slug=series_id
+        return Sermon.objects.select_related("series").get(
+            youtube_id=youtube_id,
+            series__slug=series_slug
         )
     except Sermon.DoesNotExist:
         return None
-    return obj
     
 
     
