@@ -71,8 +71,9 @@ class SermonInline(SermonMediaMixin, admin.TabularInline):
 @admin.register(Series)
 class SeriesAdmin(admin.ModelAdmin):
     inlines = [SermonInline]
-    list_display = ('title', 'description', 'created_at', 'updated_at')
-    
+    list_display = ('title','featured', 'description', 'created_at', 'updated_at')
+    list_editable = ('featured',)
+    list_filter = ('featured', 'created_at')
     fields = ['title', 'description', 'youtube_playlist_id','published_at', 'created_at', 'updated_at', 'slug']
     readonly_fields = ['created_at', 'updated_at','slug']
 

@@ -56,9 +56,13 @@ class Series(models.Model):
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    featured = models.BooleanField(default=False)
     
     # src/sermons/models.py/Series/save
     def save(self, *args, **kwargs):
+        if self.featured:
+            Series.objects.filter(featured=True).exclude(pk=self.pk).update(featured=False)
+        
         if not self.slug:
             if self.youtube_playlist_id:
                 self.slug = self.youtube_playlist_id

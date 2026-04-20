@@ -38,4 +38,19 @@ def get_sermon_detail(series_slug=None, youtube_id=None):
 def get_published_sermons():
     return Sermon.objects.filter(status="published")
 
+def get_featured_sermons(limit=None):
+    from .models import Sermon, Series
 
+    featured_series = Series.objects.filter(featured=True).first()
+
+    if not featured_series:
+        return []
+
+    queryset = Sermon.objects.filter(
+        series=featured_series
+    ).order_by('-published_at')
+
+    if limit:
+        queryset = queryset[:limit]
+
+    return queryset

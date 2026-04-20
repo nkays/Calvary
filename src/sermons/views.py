@@ -5,6 +5,7 @@ from django.db.models import Q
 from .models import Sermon, Series
 from django.conf import settings
 from . import services
+from .services import get_featured_sermons
 
 
 # Create your views here.
@@ -57,6 +58,7 @@ def sermon_detail(request, series_slug=None, youtube_id=None, *args, **kwargs):
 def sermon_list(request):
     sermons = Sermon.objects.select_related("series").all()
 
+
     # --- Filters ---
     query = request.GET.get("q")
     series_id = request.GET.get("series")
@@ -87,6 +89,7 @@ def sermon_list(request):
         "selected_series": series_id,
         "sort": sort,
         "series_list": Series.objects.all(),
+        "featured_items": get_featured_sermons(limit=5),
     })
 
 
@@ -109,6 +112,7 @@ def series_list(request):
         "page_subtitle": "Browse sermon series",
 
         "query": query,
+        "featured_items":get_featured_sermons(limit=5),
     })
 
 from django.shortcuts import get_object_or_404, render
