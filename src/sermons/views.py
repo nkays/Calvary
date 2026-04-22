@@ -5,7 +5,7 @@ from django.db.models import Q
 from .models import Sermon, Series
 from django.conf import settings
 from . import services
-from .services import get_featured_sermons
+from .services import get_featured_content
 
 
 # Create your views here.
@@ -78,6 +78,8 @@ def sermon_list(request):
     else:
         sermons = sermons.order_by("-published_at")  # default newest
 
+    featured_series, featured_items = get_featured_content(limit=5)
+
     return render(request, "pages/sermons/list.html", {
         "object_list": sermons,
         "object_type": "sermon",
@@ -89,7 +91,8 @@ def sermon_list(request):
         "selected_series": series_id,
         "sort": sort,
         "series_list": Series.objects.all(),
-        "featured_items": get_featured_sermons(limit=5),
+        "featured_items": featured_items,
+        "featured_series": featured_series,
     })
 
 
@@ -105,6 +108,8 @@ def series_list(request):
             Q(description__icontains=query)
         )
 
+    featured_series, featured_items = get_featured_content(limit=5)
+
     return render(request, "pages/sermons/list.html", {
         "object_list": series,
         "object_type": "series",
@@ -112,7 +117,8 @@ def series_list(request):
         "page_subtitle": "Browse sermon series",
 
         "query": query,
-        "featured_items":get_featured_sermons(limit=5),
+        "featured_items": featured_items,
+        "featured_series": featured_series,
     })
 
 from django.shortcuts import get_object_or_404, render
