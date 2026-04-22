@@ -13,7 +13,11 @@
 
     <!-- Logo -->
     <span class="text-lg font-semibold whitespace-nowrap nav-label">
-      Sermon App
+      <a href="{% url 'home' %}"
+       class="flex items-center p-2 rounded-lg hover:bg-gray-100 group">
+      <span class="text-xl"></span>
+      <span class="ml-3 nav-label">Calvary Chapel 316</span>
+    </a>
     </span>
 
     <!-- Desktop Collapse Button -->
@@ -25,6 +29,11 @@
 
   <!-- NAV -->
   <div class="flex-1 px-3 py-4 space-y-2 overflow-y-auto">
+
+    <a href="{% url 'Locations:location_list' %}" class="nav-link">
+      <span class="text-xl">📍</span>
+      <span class="ml-3 nav-label">Locations</span>
+    </a>
 
     <a href="{% url 'sermon_list' %}"
        class="flex items-center p-2 rounded-lg hover:bg-gray-100 group">
